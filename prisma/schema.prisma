@@ -1,0 +1,70 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model User {
+    id Int @id @default(autoincrement())
+
+    login    String  @unique
+    name     String
+    password String
+    salt     String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model WireguardPeer {
+    id Int @id @default(autoincrement())
+
+    peerName   String
+    publicKey  String
+    privateKey String
+    address    String
+    status     WgPeerStatus @default(ACTIVE)
+
+    lastActivity DateTime?
+    createdAt    DateTime  @default(now())
+
+    configOwners  ConfigOwner @relation(fields: [configOwnerId], references: [id])
+    configOwnerId Int         @unique
+}
+
+model ConfigOwner {
+    id Int @id @default(autoincrement())
+
+    name    String
+    balance Int    @default(0)
+
+    createdAt DateTime @default(now())
+
+    peer                WireguardPeer?
+    balanceTransactions BalanceTransaction[]
+}
+
+model BalanceTransaction {
+    id Int @id @default(autoincrement())
+
+    amount Int
+    type   TransactionType
+
+    owner   ConfigOwner @relation(fields: [ownerId], references: [id])
+    ownerId Int
+
+    createdAt DateTime @default(now())
+}
+
+enum WgPeerStatus {
+    ACTIVE
+    INACTIVE
+}
+
+enum TransactionType {
+    TOP_UP
+    DAILY_CHARGE
+}
