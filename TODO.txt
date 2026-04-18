@@ -1,0 +1,7 @@
+Добавить ip адрес клиента
+добавить флаг бесплатного доступа\
+
+
+
+pnpm dlx prisma migrate dev --name init
+pnpm dlx prisma generate
