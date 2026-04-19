@@ -46,7 +46,6 @@ export const peerRepository = {
         address,
         id: peerId,
         status: WgPeerStatus.ACTIVE,
-        isEnabled: true,
       },
     })
   },

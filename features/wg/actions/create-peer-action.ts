@@ -1,3 +1,4 @@
+"use server"
 import { clientRepository } from "@/entities/client/repository/client-repository"
 import { userRepository } from "@/entities/user/repository/user-repository"
 import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
@@ -62,6 +63,7 @@ export async function createPeerAction(data: CreatePeerData) {
 
     return { success: true, message: "Пир успешно создан" }
   } catch (error) {
+    //TODO Удалить пир, если что-то пошло не так
     console.error("[CREATE_PEER] Server error", error)
     return { success: false, message: "Ошибка создания пира" }
   }
