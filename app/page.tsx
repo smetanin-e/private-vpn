@@ -1,10 +1,27 @@
-import { Peers } from "@/widgets/peers/peers"
+import { AuthModal } from "@/entities/user/ui/auth-modal"
+import { getUserSession } from "@/features/auth/actions/get-user-session"
+import { redirect } from "next/navigation"
 
-export default function Page() {
+export default async function Page() {
+  const user = await getUserSession()
+  if (user) {
+    return redirect("/dashboard")
+  }
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-center">
-      <h1 className="text-2xl font-medium">Это будет самый крутой ВПН!</h1>
-      <Peers />
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <div className="flex grow-1 flex-col items-center justify-center">
+        <h1 className="mb-4 text-center text-4xl font-bold md:text-5xl">
+          Добро пожаловать в сервис EsmetVPN!
+        </h1>
+
+        <p className="text-l mb-8 max-w-xl p-2 text-center text-gray-300">
+          Безопасный доступ к интернету для ограниченного круга пользователей.
+          Пожалуйста, войдите в систему, чтобы управлять своими настройками и
+          параметрами VPN.
+        </p>
+
+        <AuthModal />
+      </div>
     </div>
   )
 }
