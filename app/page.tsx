@@ -8,8 +8,8 @@ export default async function Page() {
     return redirect("/dashboard")
   }
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <div className="flex grow-1 flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col bg-linear-to-br from-slate-900 via-blue-900 to-slate-900">
+      <div className="flex grow flex-col items-center justify-center">
         <h1 className="mb-4 text-center text-4xl font-bold md:text-5xl">
           Добро пожаловать в сервис EsmetVPN!
         </h1>

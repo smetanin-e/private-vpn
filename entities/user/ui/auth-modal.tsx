@@ -21,12 +21,12 @@ export const AuthModal: React.FC<Props> = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-[200px]">
+        <Button className="w-50">
           <LogIn className="h-4 w-4" />
           Войти
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-sm bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <DialogContent className="min-w-sm bg-linear-to-br from-slate-900 via-blue-900 to-slate-900">
         <DialogHeader className="space-y-1">
           <DialogTitle className="text-center text-2xl font-bold">
             Добро пожаловать

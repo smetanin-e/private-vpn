@@ -1,4 +1,4 @@
-import { wgInstance } from "@/shared/service/wg-instance"
+import { wgInstance } from "@/features/wg/api/wg-instance"
 
 export const peerApi = {
   async getConfigById(peerId: number) {

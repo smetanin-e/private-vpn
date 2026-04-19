@@ -4,3 +4,5 @@
 
 pnpm dlx prisma migrate dev --name init
 pnpm dlx prisma generate
+
+tree -a -I "node_modules|.next|.git" --charset=ascii private-vpn > architecture.txt
