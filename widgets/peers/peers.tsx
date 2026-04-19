@@ -23,13 +23,13 @@ export const Peers: React.FC<Props> = () => {
       )}
     >
       <CardHeader className="mb-0 pb-0">
-        <CardTitle>Профили WireGuard</CardTitle>
+        <CardTitle>Профили клиентов WireGuard</CardTitle>
         <div className="flex-wrap space-y-4 text-sm sm:flex sm:items-center sm:justify-between sm:space-y-0 sm:space-x-6 md:flex-nowrap">
           <div className="flex space-x-6">
             Тут будет общее количество и поиск
           </div>
           <Button variant={"outline"} size={"sm"}>
-            Добавить профиль
+            Добавить клиента
           </Button>
         </div>
       </CardHeader>
@@ -54,7 +54,7 @@ export const Peers: React.FC<Props> = () => {
         />
         <PeerCard
           name="Юля Сестра"
-          description="Телефон личный"
+          description="Телефон личный dsfdsf dsf sdf sdf s sdfsfwef erf efe fdf sd fsdf ds"
           uid="13"
           balance={20000}
         />

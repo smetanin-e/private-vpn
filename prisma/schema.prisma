@@ -31,11 +31,11 @@ model WireguardPeer {
     lastActivity DateTime?
     createdAt    DateTime  @default(now())
 
-    configOwners  ConfigOwner @relation(fields: [configOwnerId], references: [id])
-    configOwnerId Int         @unique
+    client   Client @relation(fields: [clientId], references: [id])
+    clientId Int    @unique
 }
 
-model ConfigOwner {
+model Client {
     id Int @id @default(autoincrement())
 
     name        String
@@ -55,8 +55,8 @@ model BalanceTransaction {
     amount Int
     type   TransactionType
 
-    owner   ConfigOwner @relation(fields: [ownerId], references: [id])
-    ownerId Int
+    client   Client @relation(fields: [clientId], references: [id])
+    clientId Int
 
     createdAt DateTime @default(now())
 }

@@ -49,16 +49,17 @@ export function PeerCard({
 
   return (
     <Card className="w-full border-slate-700 bg-slate-900/50 p-4 transition-colors hover:border-slate-600">
-      {/* Status Badge */}
-      <div className="flex justify-between gap-4">
-        {/* Name & Description */}
-        <div className="text-left">
-          <p className="font-medium">{name}</p>
-          <p className="text-sm text-muted-foreground">{description}</p>
+      <div>
+        <div className="flex justify-between gap-4">
+          {/* Name  */}
+          <p className="text-left font-medium">{name}</p>
+          {/* Status Badge */}
+          <Badge variant={isActive ? "default" : "secondary"}>
+            {isActive ? "Активен" : "Отключен"}
+          </Badge>
         </div>
-        <Badge variant={isActive ? "default" : "secondary"}>
-          {isActive ? "Активен" : "Отключен"}
-        </Badge>
+        {/*  Description */}
+        <p className="text-left text-sm text-muted-foreground">{description}</p>
       </div>
 
       <div className="grid md:grid-cols-[1fr_auto]">
@@ -96,7 +97,7 @@ export function PeerCard({
                 htmlFor={`paid-${uid}`}
                 className="w-20 cursor-pointer text-sm"
               >
-                {isPaid ? "Платно" : "Бесплатно"}
+                {isPaid ? "Бесплатно" : "Платно"}
               </Label>
             </div>
 
@@ -124,7 +125,7 @@ export function PeerCard({
               onClick={onDownload}
               title="Скачать"
             >
-              <Download className="size-4" />
+              <Download className="size-6" />
               <span className="sm:hidden">Скачать</span>
             </Button>
             <Button
@@ -134,7 +135,7 @@ export function PeerCard({
               onClick={onQrCode}
               title="QR-код"
             >
-              <QrCode className="size-4" />
+              <QrCode className="size-6" />
               <span className="sm:hidden">QR</span>
             </Button>
             <Button
@@ -144,7 +145,7 @@ export function PeerCard({
               onClick={onDelete}
               title="Удалить"
             >
-              <Trash2 className="size-4" />
+              <Trash2 className="size-6" />
               <span className="sm:hidden">Удалить</span>
             </Button>
           </div>
