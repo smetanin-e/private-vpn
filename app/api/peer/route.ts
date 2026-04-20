@@ -4,11 +4,10 @@ import { getUserSession } from "@/features/auth/actions/get-user-session"
 import { validateApiToken } from "@/shared/lib/validate-api-token"
 
 export async function GET(req: NextRequest) {
-  if (!validateApiToken(req)) {
-    return NextResponse.json(
-      { error: "Пользователь не авторизован" },
-      { status: 401 }
-    )
+  const isValid = validateApiToken(req)
+
+  if (!isValid) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
   try {

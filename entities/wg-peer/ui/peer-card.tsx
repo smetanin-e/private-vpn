@@ -11,7 +11,7 @@ import { DeletePeer } from "@/features/wg/ui/delete-peer"
 interface ClientCardProps {
   name: string
   description: string
-  uid: string
+  uid: number
   balance: number
   isPaid?: boolean
   isActive?: boolean
@@ -118,9 +118,9 @@ export function PeerCard({
 
           {/* Action Buttons */}
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
-            <DownloadConf peerId={2} peerName={"vpn"} />
-            <Qr peerId={2} peerName={"vpn"} />
-            <DeletePeer peerId={2} />
+            <DownloadConf peerId={uid} peerName={`vpn${uid}`} />
+            <Qr peerId={uid} peerName={`UID:${uid}`} />
+            <DeletePeer peerId={uid} />
           </div>
         </div>
       </div>

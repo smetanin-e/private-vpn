@@ -1,5 +1,5 @@
 import { PeerQueryType } from "@/entities/wg-peer/models/types"
-import { apiClient } from "@/shared/service/instance"
+import { clientAxiosInstance } from "@/shared/service/instance"
 
 interface FetchPeersParams {
   pageParam?: number // номер страницы для useInfiniteQuery
@@ -20,7 +20,7 @@ export const fetchPeers = async ({
     params.set("take", take.toString())
     params.set("skip", skip.toString())
     if (search.trim()) params.set("search", search.trim())
-    const { data } = await apiClient.get<PeerQueryType[]>(
+    const { data } = await clientAxiosInstance.get<PeerQueryType[]>(
       `/api/peer?${params.toString()}`
     )
 

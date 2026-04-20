@@ -8,7 +8,15 @@ const basePeerSelect = {
   id: true,
   peerName: true,
   status: true,
-  client: { select: { id: true, name: true } },
+  client: {
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      balance: true,
+      is_free: true,
+    },
+  },
 }
 
 export const peerRepository = {

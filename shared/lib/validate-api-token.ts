@@ -1,19 +1,18 @@
 import { NextRequest } from "next/server"
 
-export function validateApiToken(req: NextRequest): boolean {
-  const authHeader = req.headers.get("authorization") || ""
+export function validateApiToken(req: NextRequest) {
+  const authHeader = req.headers.get("authorization")
 
-  // Проверяем формат Bearer-токена
-  if (!authHeader.startsWith("Bearer ")) {
-    console.log("Authorization header missing or invalid format")
+  if (!authHeader?.startsWith("Bearer ")) {
+    console.log("No Bearer token found")
     return false
   }
 
-  // Безопасно извлекаем токен
-  const token = authHeader.substring(7).trim()
+  const token = authHeader.split(" ")[1]
+  const isValid =
+    token === process.env.INTERNAL_API_TOKEN ||
+    token === process.env.API_READ_KEY ||
+    token === process.env.NEXT_PUBLIC_API_READ_KEY
 
-  // Один токен для API-валидации
-  const validToken = process.env.INTERNAL_API_TOKEN
-  console.log(token === validToken)
-  return token === validToken
+  return isValid
 }
