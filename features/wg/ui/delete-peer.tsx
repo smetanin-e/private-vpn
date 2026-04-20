@@ -33,7 +33,7 @@ export const DeletePeer: React.FC<Props> = ({ peerId }) => {
             <span className="sm:hidden">Удалить</span>
           </Button>
         }
-        description="Вы действительно хотите удалить конфигурацию VPN?"
+        description={`Вы действительно хотите удалить конфигурацию VPN? UID: ${peerId}`}
         onConfirm={handleDelete}
       />
     </>
