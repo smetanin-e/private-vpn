@@ -4,6 +4,13 @@ import { normalizeWgConfig } from "../lib/normalize-config"
 import { prisma } from "@/shared/lib/prisma"
 import { WgPeerStatus } from "@/generated/prisma/enums"
 
+const basePeerSelect = {
+  id: true,
+  peerName: true,
+  status: true,
+  client: { select: { id: true, name: true } },
+}
+
 export const peerRepository = {
   async createPeerOnWgServer(
     name: string
@@ -61,6 +68,23 @@ export const peerRepository = {
   async deletePeer(peerId: number) {
     return prisma.wireguardPeer.delete({
       where: { id: peerId },
+    })
+  },
+
+  //Получаем пиры из БД по поиску (имя)
+  async getAllPeersFiltered(search: string, take?: number, skip?: number) {
+    return prisma.wireguardPeer.findMany({
+      where: search
+        ? {
+            client: {
+              name: { contains: search, mode: "insensitive" },
+            },
+          }
+        : {},
+      select: basePeerSelect,
+      orderBy: { createdAt: "desc" },
+      take,
+      skip,
     })
   },
 }

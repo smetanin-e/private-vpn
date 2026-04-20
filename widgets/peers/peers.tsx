@@ -2,7 +2,6 @@
 import React from "react"
 import { cn } from "@/shared/lib/utils"
 import {
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -11,12 +10,24 @@ import {
 
 import { PeerCard } from "@/entities/wg-peer/ui"
 import { CreatePeerModal } from "@/features/wg/ui/create-peer-modal"
+import { useGetPeers } from "@/entities/wg-peer/hooks"
 
 interface Props {
   className?: string
 }
 
 export const Peers: React.FC<Props> = () => {
+  const [searchValue, setSearchValue] = React.useState("")
+  const {
+    data,
+    status,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useGetPeers(searchValue)
+
+  const peers = data?.pages.flatMap((page) => page.peers) ?? []
   return (
     <Card
       className={cn(
@@ -33,6 +44,7 @@ export const Peers: React.FC<Props> = () => {
         </div>
       </CardHeader>
       <CardContent className="space-y-2 p-1">
+        123
         <PeerCard
           name="Смолоперегонный Александр Иванович"
           description="Телефон жены Xiaomi"
