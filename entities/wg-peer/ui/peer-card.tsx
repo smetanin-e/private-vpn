@@ -1,9 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Download, QrCode, Trash2, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { Badge, Button, Card, Label, Switch } from "@/shared/components/ui"
 import { WgLogo } from "@/shared/components"
+import { DownloadConf } from "./download-conf"
+import { Qr } from "./qr"
+import { DeletePeer } from "@/features/wg/ui/delete-peer"
 
 interface ClientCardProps {
   name: string
@@ -28,9 +31,6 @@ export function PeerCard({
   isPaid: initialIsPaid = true,
   isActive: initialIsActive = true,
   onTopUp,
-  onDownload,
-  onQrCode,
-  onDelete,
   onPaidChange,
   onActiveChange,
 }: ClientCardProps) {
@@ -65,7 +65,7 @@ export function PeerCard({
       <div className="grid md:grid-cols-[1fr_auto]">
         <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-[auto_1fr] md:grid-cols-[auto_1fr_auto_auto] md:gap-10">
           {/* UID */}
-          <div className="flex items-center justify-center gap-2 rounded px-3 py-1.5 sm:justify-start">
+          <div className="flex items-center justify-center gap-2 rounded py-1.5 sm:justify-start">
             <WgLogo width={25} height={25} />
             <span className="text-lg text-muted-foreground">UID:</span>
             <code className="truncate font-mono text-lg">{uid}</code>
@@ -73,7 +73,7 @@ export function PeerCard({
 
           {/* Balance */}
           <div className="flex items-center justify-between gap-3 sm:justify-end md:justify-start">
-            <div className="flex items-center gap-4 sm:w-36">
+            <div className="flex items-center gap-4 sm:w-30">
               <p className="text-xs text-muted-foreground">Баланс</p>
               <p className="text-lg font-semibold tabular-nums">
                 {balance.toLocaleString("ru-RU")} ₽
@@ -118,36 +118,9 @@ export function PeerCard({
 
           {/* Action Buttons */}
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
-            <Button
-              className="flex-1 gap-2 sm:flex-none sm:gap-0"
-              variant="outline"
-              size="icon"
-              onClick={onDownload}
-              title="Скачать"
-            >
-              <Download className="size-6" />
-              <span className="sm:hidden">Скачать</span>
-            </Button>
-            <Button
-              className="flex-1 gap-2 sm:flex-none sm:gap-0"
-              variant="outline"
-              size="icon"
-              onClick={onQrCode}
-              title="QR-код"
-            >
-              <QrCode className="size-6" />
-              <span className="sm:hidden">QR</span>
-            </Button>
-            <Button
-              className="flex-1 gap-2 sm:flex-none sm:gap-0"
-              variant="destructive"
-              size="icon"
-              onClick={onDelete}
-              title="Удалить"
-            >
-              <Trash2 className="size-6" />
-              <span className="sm:hidden">Удалить</span>
-            </Button>
+            <DownloadConf peerId={2} peerName={"vpn"} />
+            <Qr peerId={2} peerName={"vpn"} />
+            <DeletePeer peerId={2} />
           </div>
         </div>
       </div>

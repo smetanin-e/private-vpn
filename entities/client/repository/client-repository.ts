@@ -9,4 +9,10 @@ export const clientRepository = {
       },
     })
   },
+
+  async findClientById(clientId: number) {
+    return prisma.client.findFirst({
+      where: { id: clientId },
+    })
+  },
 }

@@ -4,4 +4,6 @@ export { ErrorText } from "./error-text"
 export { CleareButton } from "./cleare-button"
 export { ShowPasswordIcon } from "./show-password-icon"
 
+export { AlertDialog } from "./alert-dialog"
+
 export { Header } from "./header"

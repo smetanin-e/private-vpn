@@ -24,8 +24,13 @@ export const CreatePeerModal: React.FC<Props> = ({ className }) => {
     <div className={className}>
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>
-          <Button disabled={isLoading} size="sm" className="w-full sm:w-auto">
-            Добавить конфигурацию
+          <Button
+            variant={"outline"}
+            disabled={isLoading}
+            size="sm"
+            className="w-full sm:w-auto"
+          >
+            Добавить клиента
           </Button>
         </DialogTrigger>
         <DialogContent className="min-w-sm bg-linear-to-br from-slate-900 via-blue-900 to-slate-900">

@@ -49,4 +49,18 @@ export const peerRepository = {
       },
     })
   },
+
+  // Поиск пира по id
+  async findPeerById(peerId: number) {
+    return prisma.wireguardPeer.findFirst({
+      where: { id: peerId },
+    })
+  },
+
+  //Удаляем пир
+  async deletePeer(peerId: number) {
+    return prisma.wireguardPeer.delete({
+      where: { id: peerId },
+    })
+  },
 }
