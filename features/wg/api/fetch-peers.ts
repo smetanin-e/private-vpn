@@ -1,4 +1,4 @@
-import { PeerQueryType } from "@/entities/wg-peer/models/types"
+import { PeerQueryType } from "@/entities/wg-peer/model/types"
 import { clientAxiosInstance } from "@/shared/service/instance"
 
 interface FetchPeersParams {

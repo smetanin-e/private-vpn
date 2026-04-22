@@ -95,4 +95,42 @@ export const peerRepository = {
       skip,
     })
   },
+
+  async countAllUsers() {
+    const peers = await prisma.wireguardPeer.groupBy({
+      by: ["id", "status"],
+      _count: { _all: true },
+    })
+
+    const result = peers.reduce((acc, p) => {
+      const existing = acc.get(p.id) || { active: 0, disabled: 0, total: 0 }
+
+      if (p.status === WgPeerStatus.ACTIVE) {
+        existing.active += p._count._all
+      } else {
+        existing.disabled += p._count._all
+      }
+
+      existing.total += p._count._all
+      acc.set(p.id, existing)
+
+      return acc
+    }, new Map<number, { active: number; disabled: number; total: number }>())
+
+    return Array.from(result.entries()).map(([userId, stats]) => ({
+      userId,
+      ...stats,
+    }))
+  },
+
+  // обновление статуса пира по id
+  async updatePeerStatus(peerId: number, value: boolean) {
+    const status = value ? WgPeerStatus.ACTIVE : WgPeerStatus.INACTIVE
+    return prisma.wireguardPeer.update({
+      where: { id: peerId },
+      data: {
+        status,
+      },
+    })
+  },
 }

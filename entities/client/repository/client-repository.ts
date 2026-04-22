@@ -15,4 +15,17 @@ export const clientRepository = {
       where: { id: clientId },
     })
   },
+
+  async deleteClient(clientId: number) {
+    return prisma.client.delete({
+      where: { id: clientId },
+    })
+  },
+
+  async updateFreeMode(clientId: number, isFree: boolean) {
+    return prisma.client.update({
+      where: { id: clientId },
+      data: { is_free: isFree },
+    })
+  },
 }

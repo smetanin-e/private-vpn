@@ -1,26 +1,23 @@
 "use client"
 
-import { useState } from "react"
 import { Plus } from "lucide-react"
-import { Badge, Button, Card, Label, Switch } from "@/shared/components/ui"
+import { Badge, Button, Card, Label } from "@/shared/components/ui"
 import { WgLogo } from "@/shared/components"
 import { DownloadConf } from "./download-conf"
 import { Qr } from "./qr"
 import { DeletePeer } from "@/features/wg/ui/delete-peer"
+import { ChangePeerStatus } from "@/features/wg/ui/change-peer-status"
+import { WgPeerStatus } from "@/generated/prisma/enums"
+import { cn } from "@/shared/lib/utils"
+import { ChangeFreeMode } from "@/features/wg/ui/change-free-mode"
 
 interface ClientCardProps {
   name: string
   description: string
   uid: number
   balance: number
-  isPaid?: boolean
-  isActive?: boolean
-  onTopUp?: () => void
-  onDownload?: () => void
-  onQrCode?: () => void
-  onDelete?: () => void
-  onPaidChange?: (isPaid: boolean) => void
-  onActiveChange?: (isActive: boolean) => void
+  status: WgPeerStatus
+  isFree: boolean
 }
 
 export function PeerCard({
@@ -28,35 +25,24 @@ export function PeerCard({
   description,
   uid,
   balance,
-  isPaid: initialIsPaid = true,
-  isActive: initialIsActive = true,
-  onTopUp,
-  onPaidChange,
-  onActiveChange,
+  status,
+  isFree,
 }: ClientCardProps) {
-  const [isPaid, setIsPaid] = useState(initialIsPaid)
-  const [isActive, setIsActive] = useState(initialIsActive)
-
-  const handlePaidChange = (checked: boolean) => {
-    setIsPaid(checked)
-    onPaidChange?.(checked)
-  }
-
-  const handleActiveChange = (checked: boolean) => {
-    setIsActive(checked)
-    onActiveChange?.(checked)
-  }
-
   return (
-    <Card className="w-full border-slate-700 bg-slate-900/50 p-4 transition-colors hover:border-slate-600">
+    <Card
+      className={cn(
+        status === WgPeerStatus.ACTIVE
+          ? "border-slate-700 bg-slate-900/50 hover:border-slate-600"
+          : "border-slate-800 bg-slate-800/40 opacity-80",
+        "p-4 transition-colors"
+      )}
+    >
       <div>
         <div className="flex justify-between gap-4">
           {/* Name  */}
           <p className="text-left font-medium">{name}</p>
-          {/* Status Badge */}
-          <Badge variant={isActive ? "default" : "secondary"}>
-            {isActive ? "Активен" : "Отключен"}
-          </Badge>
+          {/* Trafic */}
+          <p>⬇️ 0.11 Гб ⬆️ 0.50 Гб</p>
         </div>
         {/*  Description */}
         <p className="text-left text-sm text-muted-foreground">{description}</p>
@@ -79,39 +65,37 @@ export function PeerCard({
                 {balance.toLocaleString("ru-RU")} ₽
               </p>
             </div>
-            <Button size="sm" variant="outline" onClick={onTopUp}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => alert("Пополнение баланса в разработке")}
+            >
               <Plus className="size-4" />
               Пополнить
             </Button>
           </div>
 
           {/* Toggles */}
-          <div className="flex gap-2 md:flex-col">
+          <div className="flex gap-10 md:flex-col md:gap-2">
             <div className="flex items-center gap-2">
-              <Switch
-                id={`paid-${uid}`}
-                checked={isPaid}
-                onCheckedChange={handlePaidChange}
-              />
-              <Label
-                htmlFor={`paid-${uid}`}
-                className="w-20 cursor-pointer text-sm"
-              >
-                {isPaid ? "Бесплатно" : "Платно"}
+              <ChangeFreeMode id={uid} isFree={isFree} />
+              <Label htmlFor={`free-${uid}`}>
+                <Badge variant={isFree ? "success" : "destructive"}>
+                  {isFree ? "Бесплатный" : "Платный"}
+                </Badge>
               </Label>
             </div>
 
             <div className="flex items-center gap-2">
-              <Switch
-                id={`active-${uid}`}
-                checked={isActive}
-                onCheckedChange={handleActiveChange}
-              />
-              <Label
-                htmlFor={`active-${uid}`}
-                className="w-20 cursor-pointer text-sm"
-              >
-                {isActive ? "Активен" : "Отключен"}
+              <ChangePeerStatus id={uid} status={status} />
+              <Label htmlFor={`active-${uid}`}>
+                <Badge
+                  variant={
+                    status === WgPeerStatus.ACTIVE ? "success" : "destructive"
+                  }
+                >
+                  {status === WgPeerStatus.ACTIVE ? "Активен" : "Отключен"}
+                </Badge>
               </Label>
             </div>
           </div>

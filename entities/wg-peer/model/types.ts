@@ -30,3 +30,10 @@ export interface WireguardServerPeer {
     name: string
   }
 }
+
+export interface PeersStats {
+  userId: number
+  active: number
+  disabled: number
+  total: number
+}

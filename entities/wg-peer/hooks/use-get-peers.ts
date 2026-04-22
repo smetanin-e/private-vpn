@@ -11,7 +11,7 @@ export const useGetPeers = (search?: string) => {
     () => {
       setDebouncedSearch(search)
     },
-    500,
+    1000,
     [search]
   )
   return useInfiniteQuery({

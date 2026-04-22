@@ -6,5 +6,6 @@ export { ShowPasswordIcon } from "./show-password-icon"
 export { EmptyData } from "./empty-data"
 export { LoadingBounce } from "./loading-bounce"
 export { AlertDialog } from "./alert-dialog"
+export { ShowMore } from "./show-more"
 
 export { Header } from "./header"

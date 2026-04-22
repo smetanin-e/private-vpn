@@ -8,10 +8,11 @@ import {
   CardTitle,
 } from "@/shared/components/ui"
 
-import { PeerCard } from "@/entities/wg-peer/ui"
+import { PeerCard, SearchPeer } from "@/entities/wg-peer/ui"
 import { CreatePeerModal } from "@/features/wg/ui/create-peer-modal"
-import { useGetPeers } from "@/entities/wg-peer/hooks"
-import { EmptyData, LoadingBounce } from "@/shared/components"
+import { useGetPeers, usePeersStats } from "@/entities/wg-peer/hooks"
+import { EmptyData, LoadingBounce, ShowMore } from "@/shared/components"
+import { PeersQuantity } from "@/entities/wg-peer/ui/peers-quantity"
 
 interface Props {
   className?: string
@@ -29,6 +30,9 @@ export const Peers: React.FC<Props> = () => {
   } = useGetPeers(searchValue)
 
   const peers = data?.pages.flatMap((page) => page.peers) ?? []
+
+  const { data: peerStats, isLoading } = usePeersStats()
+  const stats = peerStats ?? []
 
   if (status === "error") {
     return (
@@ -52,13 +56,21 @@ export const Peers: React.FC<Props> = () => {
         <>
           <CardHeader className="mb-0 pb-0">
             <CardTitle>Профили клиентов WireGuard</CardTitle>
-            <div className="flex-wrap space-y-4 text-sm sm:flex sm:items-center sm:justify-between sm:space-y-0 sm:space-x-6 md:flex-nowrap">
+
+            <div className="mb-4 flex-wrap space-y-4 text-sm sm:flex sm:items-center sm:justify-between sm:space-y-0 sm:space-x-6 md:flex-nowrap">
               <div className="flex space-x-6">
-                Тут будет общее количество и поиск
+                Клиенты:
+                <PeersQuantity isLoading={isLoading} stats={stats} />
               </div>
+
               <CreatePeerModal />
             </div>
+            <SearchPeer
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+            />
           </CardHeader>
+
           {peers.length === 0 ? (
             <EmptyData text="Нет конфигураций" />
           ) : (
@@ -70,8 +82,17 @@ export const Peers: React.FC<Props> = () => {
                   description={peer.client.description}
                   balance={peer.client.balance}
                   uid={peer.id}
+                  status={peer.status}
+                  isFree={peer.client.is_free}
                 />
               ))}
+
+              {hasNextPage && (
+                <ShowMore
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                />
+              )}
             </CardContent>
           )}
         </>

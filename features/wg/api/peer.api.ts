@@ -1,4 +1,6 @@
+import { PeersStats } from "@/entities/wg-peer/model/types"
 import { wgInstance } from "@/features/wg/api/wg-instance"
+import { clientAxiosInstance } from "@/shared/service/instance"
 
 export const peerApi = {
   async getConfigById(peerId: number) {
@@ -65,5 +67,15 @@ export const peerApi = {
       responseType: "blob",
       withCredentials: true,
     })
+  },
+
+  async getPeerCounts() {
+    try {
+      const { data } = await clientAxiosInstance.get("/api/peer/stats/")
+      return data as PeersStats[]
+    } catch (error) {
+      console.error("[getPeerCounts] failed", error)
+      throw error
+    }
   },
 }

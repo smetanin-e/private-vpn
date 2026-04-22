@@ -26,7 +26,7 @@ export default function RootLayout({
         geist.variable
       )}
     >
-      <body>
+      <body className="dark">
         <Providers>{children}</Providers>
       </body>
     </html>

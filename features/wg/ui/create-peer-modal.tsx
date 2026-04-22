@@ -27,7 +27,6 @@ export const CreatePeerModal: React.FC<Props> = ({ className }) => {
           <Button
             variant={"outline"}
             disabled={isLoading}
-            size="sm"
             className="w-full sm:w-auto"
           >
             Добавить клиента

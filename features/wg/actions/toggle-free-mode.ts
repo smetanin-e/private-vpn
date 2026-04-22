@@ -4,7 +4,7 @@ import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
 import { peerApi } from "../api"
 import { clientRepository } from "@/entities/client/repository/client-repository"
 
-export async function deletePeerAction(peerId: number) {
+export async function toggleFreeModeAction(peerId: number) {
   try {
     const peer = await peerRepository.findPeerById(peerId)
     if (!peer) {
@@ -16,13 +16,18 @@ export async function deletePeerAction(peerId: number) {
       return { success: false, message: "Клиент не найден" }
     }
 
-    await peerApi.delete(peer.id)
-    await peerRepository.deletePeer(peer.id)
-    await clientRepository.deleteClient(client.id)
+    const currentMode = client.is_free
+
+    //меняем статус на сервере WG
+    await peerApi.changeEnable(peer.id, !currentMode)
+
+    //обновляем БД
+
+    await clientRepository.updateFreeMode(peer.clientId, !currentMode)
 
     return { success: true }
   } catch (error) {
-    console.error("[DELETE_PEER] Server error", error)
-    return { success: false, message: "Ошибка удаления пира" }
+    console.error("[TOGGLE_FREE_MODE] Server error", error)
+    return { success: false, message: "Ошибка изменения статуса тарифа" }
   }
 }
