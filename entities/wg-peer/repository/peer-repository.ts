@@ -7,14 +7,19 @@ import { WgPeerStatus } from "@/generated/prisma/enums"
 const basePeerSelect = {
   id: true,
   peerName: true,
+  wgPeerId: true,
   status: true,
+  receivedBytes: true,
+  sentBytes: true,
+
   client: {
     select: {
       id: true,
       name: true,
       description: true,
       balance: true,
-      is_free: true,
+      isFree: true,
+      tariff: true,
     },
   },
 }
@@ -59,7 +64,7 @@ export const peerRepository = {
         publicKey,
         privateKey,
         address,
-        id: peerId,
+        wgPeerId: peerId,
         status: WgPeerStatus.ACTIVE,
       },
     })
@@ -69,6 +74,12 @@ export const peerRepository = {
   async findPeerById(peerId: number) {
     return prisma.wireguardPeer.findFirst({
       where: { id: peerId },
+    })
+  },
+
+  async findPeerByWgId(wgPeerId: number) {
+    return prisma.wireguardPeer.findFirst({
+      where: { wgPeerId },
     })
   },
 

@@ -3,9 +3,15 @@ import { WgPeerStatus } from "@/generated/prisma/enums"
 
 export type PeerQueryType = {
   id: number
+  wgPeerId: number
   peerName: string
   status: WgPeerStatus
-  client: Pick<Client, "id" | "name" | "description" | "is_free" | "balance">
+  receivedBytes: number
+  sentBytes: number
+  client: Pick<
+    Client,
+    "id" | "name" | "description" | "isFree" | "balance" | "tariff"
+  >
 }
 
 export interface WireguardServerPeer {

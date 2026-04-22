@@ -1,11 +1,12 @@
 import { prisma } from "@/shared/lib/prisma"
 
 export const clientRepository = {
-  async createClient(name: string, description: string) {
+  async createClient(name: string, description: string, tariff: number) {
     return prisma.client.create({
       data: {
         name,
         description,
+        tariff,
       },
     })
   },
@@ -25,7 +26,7 @@ export const clientRepository = {
   async updateFreeMode(clientId: number, isFree: boolean) {
     return prisma.client.update({
       where: { id: clientId },
-      data: { is_free: isFree },
+      data: { isFree: isFree },
     })
   },
 }

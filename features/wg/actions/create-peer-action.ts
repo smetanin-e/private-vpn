@@ -2,15 +2,17 @@
 import { clientRepository } from "@/entities/client/repository/client-repository"
 import { userRepository } from "@/entities/user/repository/user-repository"
 import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
+import { peerApi } from "../api"
 
 type CreatePeerData = {
-  peerName: string
+  tariff: number
   clientName: string
   clientDescription: string
   adminId: number
 }
 
 export async function createPeerAction(data: CreatePeerData) {
+  let createdPeerId: number | null = null
   try {
     const user = await userRepository.findUserById(data.adminId)
     if (!user) {
@@ -18,34 +20,26 @@ export async function createPeerAction(data: CreatePeerData) {
     }
 
     // Создаём пира на wg-rest-api
-    const peer = await peerRepository.createPeerOnWgServer(data.peerName)
+    const peer = await peerRepository.createPeerOnWgServer("wgconfig")
     if (!peer) {
       return { success: false, message: "Ошибка при создании пира сервере WG" }
     }
 
-    // Получаем конфиг напрямую из wg-rest-api
-    const config = await peerRepository.getWgServerPeerConfig(peer.id)
-    if (!config) {
-      return { success: false, message: "Ошибка сервере WG при получении пира" }
-    }
+    createdPeerId = peer.id
 
-    // Парсим ключи и адрес из конфига
-    const privateKey = config.match(/PrivateKey\s*=\s*(.+)/)?.[1] ?? ""
-    const publicKey = config.match(/PublicKey\s*=\s*(.+)/)?.[1] ?? ""
-    const address = config.match(/Address\s*=\s*(.+)/)?.[1] ?? ""
+    const privateKey = peer.private_key
+    const publicKey = peer.public_key
+    const address = peer.address
 
     if (!privateKey || !publicKey || !address) {
-      console.error("Config parse error:", config)
-      return {
-        success: false,
-        message: "Не удалось проанализировать конфигурацию WireGuard.",
-      }
+      throw new Error("Некорректные данные от WG API")
     }
 
     // Создаем владельца конфига.
     const client = await clientRepository.createClient(
       data.clientName,
-      data.clientDescription
+      data.clientDescription,
+      data.tariff
     )
     if (!client) {
       return { success: false, message: "Ошибка при создании клиента в БД" }
@@ -54,7 +48,7 @@ export async function createPeerAction(data: CreatePeerData) {
 
     await peerRepository.createPeerDb(
       client.id,
-      data.peerName,
+      "wgconfig",
       peer.id,
       publicKey,
       privateKey,
@@ -63,7 +57,15 @@ export async function createPeerAction(data: CreatePeerData) {
 
     return { success: true, message: "Пир успешно создан" }
   } catch (error) {
-    //TODO Удалить пир, если что-то пошло не так
+    // 💥 Удалить пир, если что-то пошло не так
+    if (createdPeerId) {
+      try {
+        await peerApi.delete(createdPeerId)
+        console.log(`Rollback: peer ${createdPeerId} удалён`)
+      } catch (deleteError) {
+        console.error("Rollback failed: не удалось удалить пир", deleteError)
+      }
+    }
     console.error("[CREATE_PEER] Server error", error)
     return { success: false, message: "Ошибка создания пира" }
   }

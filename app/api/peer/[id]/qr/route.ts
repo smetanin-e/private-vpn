@@ -17,7 +17,7 @@ export async function GET(
         { status: 401 }
       )
 
-    const peer = await peerRepository.findPeerById(peerId)
+    const peer = await peerRepository.findPeerByWgId(peerId)
     if (!peer)
       return NextResponse.json(
         { error: "Файлы vpn конфигурацый не найдены" },

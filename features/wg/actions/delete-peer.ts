@@ -6,7 +6,7 @@ import { clientRepository } from "@/entities/client/repository/client-repository
 
 export async function deletePeerAction(peerId: number) {
   try {
-    const peer = await peerRepository.findPeerById(peerId)
+    const peer = await peerRepository.findPeerByWgId(peerId)
     if (!peer) {
       return { success: false, message: "Конфигурация не найдена" }
     }
@@ -16,7 +16,7 @@ export async function deletePeerAction(peerId: number) {
       return { success: false, message: "Клиент не найден" }
     }
 
-    await peerApi.delete(peer.id)
+    await peerApi.delete(peer.wgPeerId)
     await peerRepository.deletePeer(peer.id)
     await clientRepository.deleteClient(client.id)
 

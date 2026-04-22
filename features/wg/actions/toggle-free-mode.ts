@@ -16,7 +16,7 @@ export async function toggleFreeModeAction(peerId: number) {
       return { success: false, message: "Клиент не найден" }
     }
 
-    const currentMode = client.is_free
+    const currentMode = client.isFree
 
     //меняем статус на сервере WG
     await peerApi.changeEnable(peer.id, !currentMode)

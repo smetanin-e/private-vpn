@@ -1,12 +1,8 @@
 import { z } from "zod"
 
 export const createPeerSchema = z.object({
-  peerName: z
-    .string()
-    .min(2, { message: "Введите название файла" })
-    .regex(/^[A-Za-z].*$/, {
-      message: "Название должно начинаться с латинской буквы",
-    }),
+  tariff: z.coerce.number().positive({ message: "Число должно быть больше 0" }),
+
   clientName: z.string().min(2, { message: "Введите имя клиента" }),
   clientDescription: z
     .string()

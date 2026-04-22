@@ -10,23 +10,32 @@ import { ChangePeerStatus } from "@/features/wg/ui/change-peer-status"
 import { WgPeerStatus } from "@/generated/prisma/enums"
 import { cn } from "@/shared/lib/utils"
 import { ChangeFreeMode } from "@/features/wg/ui/change-free-mode"
+import { formatTraffic } from "@/shared/lib/format-traffic"
 
 interface ClientCardProps {
+  wgPeerId: number
   name: string
   description: string
   uid: number
   balance: number
   status: WgPeerStatus
   isFree: boolean
+  tariff: number
+  received: number
+  sent: number
 }
 
 export function PeerCard({
+  wgPeerId,
   name,
   description,
   uid,
   balance,
   status,
   isFree,
+  tariff,
+  received,
+  sent,
 }: ClientCardProps) {
   return (
     <Card
@@ -40,9 +49,17 @@ export function PeerCard({
       <div>
         <div className="flex justify-between gap-4">
           {/* Name  */}
-          <p className="text-left font-medium">{name}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-left font-medium">{name}</p>
+            <span className="text-xs text-orange-400">
+              {isFree ? `(Бесплатно)` : `(${tariff} ₽/день)`}
+            </span>
+          </div>
+
           {/* Trafic */}
-          <p>⬇️ 0.11 Гб ⬆️ 0.50 Гб</p>
+          <p>
+            ⬇️ {formatTraffic(received)} ⬆️ {formatTraffic(sent)}
+          </p>
         </div>
         {/*  Description */}
         <p className="text-left text-sm text-muted-foreground">{description}</p>
@@ -102,9 +119,9 @@ export function PeerCard({
 
           {/* Action Buttons */}
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
-            <DownloadConf peerId={uid} peerName={`vpn${uid}`} />
-            <Qr peerId={uid} peerName={`UID:${uid}`} />
-            <DeletePeer peerId={uid} />
+            <DownloadConf peerId={wgPeerId} peerName={`vpn${wgPeerId}`} />
+            <Qr peerId={wgPeerId} peerName={`UID:${wgPeerId}`} />
+            <DeletePeer peerId={wgPeerId} />
           </div>
         </div>
       </div>

@@ -30,7 +30,6 @@ export const Peers: React.FC<Props> = () => {
   } = useGetPeers(searchValue)
 
   const peers = data?.pages.flatMap((page) => page.peers) ?? []
-
   const { data: peerStats, isLoading } = usePeersStats()
   const stats = peerStats ?? []
 
@@ -81,9 +80,13 @@ export const Peers: React.FC<Props> = () => {
                   name={peer.client.name}
                   description={peer.client.description}
                   balance={peer.client.balance}
-                  uid={peer.id}
+                  uid={peer.wgPeerId}
                   status={peer.status}
-                  isFree={peer.client.is_free}
+                  isFree={peer.client.isFree}
+                  tariff={peer.client.tariff}
+                  wgPeerId={peer.wgPeerId}
+                  received={peer.receivedBytes}
+                  sent={peer.sentBytes}
                 />
               ))}
 

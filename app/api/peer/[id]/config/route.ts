@@ -18,7 +18,8 @@ export async function GET(
         { status: 401 }
       )
 
-    const peer = await peerRepository.findPeerById(peerId)
+    console.log(peerId + "Route config")
+    const peer = await peerRepository.findPeerByWgId(peerId)
 
     if (!peer)
       return NextResponse.json(

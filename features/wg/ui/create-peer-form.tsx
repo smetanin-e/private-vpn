@@ -53,20 +53,21 @@ export const CreatePeerForm: React.FC<Props> = ({ setOpen, userId }) => {
             required
           />
         </div>
+
         <div className="space-y-2">
           <FormInput
-            label="Название файла конфигурации"
-            name="peerName"
-            id="peerName"
+            label="Тариф"
+            name="tariff"
+            id="tariff"
             type="text"
-            placeholder="Введите название файла. Например: vpn"
+            placeholder="Списние за один день. Например: 4 | 5 | 7"
             required
           />
         </div>
 
         <Button
           disabled={form.formState.isSubmitting}
-          className="w-full"
+          className="mt-2 w-full"
           type="submit"
         >
           {form.formState.isSubmitting ? "Создание конфигурации" : "Создать"}
