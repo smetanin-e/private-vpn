@@ -52,7 +52,7 @@ export const peerRepository = {
   async createPeerDb(
     clientId: number,
     peerName: string,
-    peerId: number,
+    wgPeerId: number,
     publicKey: string,
     privateKey: string,
     address: string
@@ -64,19 +64,20 @@ export const peerRepository = {
         publicKey,
         privateKey,
         address,
-        wgPeerId: peerId,
+        wgPeerId,
         status: WgPeerStatus.ACTIVE,
       },
     })
   },
 
-  // Поиск пира по id
+  // Поиск пира по id из БД
   async findPeerById(peerId: number) {
     return prisma.wireguardPeer.findFirst({
       where: { id: peerId },
     })
   },
 
+  // Поиск пира по id из WG REST API (wgPeerId)
   async findPeerByWgId(wgPeerId: number) {
     return prisma.wireguardPeer.findFirst({
       where: { wgPeerId },

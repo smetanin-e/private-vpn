@@ -14,9 +14,10 @@ import { formatTraffic } from "@/shared/lib/format-traffic"
 
 interface ClientCardProps {
   wgPeerId: number
+  dbPeerId: number
+  clientId: number
   name: string
   description: string
-  uid: number
   balance: number
   status: WgPeerStatus
   isFree: boolean
@@ -27,9 +28,10 @@ interface ClientCardProps {
 
 export function PeerCard({
   wgPeerId,
+  clientId,
   name,
   description,
-  uid,
+  dbPeerId,
   balance,
   status,
   isFree,
@@ -49,7 +51,7 @@ export function PeerCard({
       <div>
         <div className="flex justify-between gap-4">
           {/* Name  */}
-          <div className="flex items-center gap-2">
+          <div className="items-center gap-2 sm:flex">
             <p className="text-left font-medium">{name}</p>
             <span className="text-xs text-orange-400">
               {isFree ? `(Бесплатно)` : `(${tariff} ₽/день)`}
@@ -57,8 +59,9 @@ export function PeerCard({
           </div>
 
           {/* Trafic */}
-          <p>
-            ⬇️ {formatTraffic(received)} ⬆️ {formatTraffic(sent)}
+          <p className="text-xs">
+            <span className="text-green-300">↓ {formatTraffic(sent)}</span>
+            <span className="text-red-300"> ↑ {formatTraffic(received)}</span>
           </p>
         </div>
         {/*  Description */}
@@ -70,8 +73,8 @@ export function PeerCard({
           {/* UID */}
           <div className="flex items-center justify-center gap-2 rounded py-1.5 sm:justify-start">
             <WgLogo width={25} height={25} />
-            <span className="text-lg text-muted-foreground">UID:</span>
-            <code className="truncate font-mono text-lg">{uid}</code>
+            <span className="text-lg text-muted-foreground">Client ID:</span>
+            <code className="truncate font-mono text-lg">{clientId}</code>
           </div>
 
           {/* Balance */}
@@ -95,8 +98,8 @@ export function PeerCard({
           {/* Toggles */}
           <div className="flex gap-5 md:flex-col md:gap-2">
             <div className="flex items-center gap-2">
-              <ChangeFreeMode id={uid} isFree={isFree} />
-              <Label htmlFor={`free-${uid}`}>
+              <ChangeFreeMode id={dbPeerId} isFree={isFree} />
+              <Label htmlFor={`free-${dbPeerId}`}>
                 <Badge variant={isFree ? "success" : "destructive"}>
                   {isFree ? "Бесплатный" : "Платный"}
                 </Badge>
@@ -104,8 +107,8 @@ export function PeerCard({
             </div>
 
             <div className="flex items-center gap-2">
-              <ChangePeerStatus id={uid} status={status} />
-              <Label htmlFor={`active-${uid}`}>
+              <ChangePeerStatus id={dbPeerId} status={status} />
+              <Label htmlFor={`active-${dbPeerId}`}>
                 <Badge
                   variant={
                     status === WgPeerStatus.ACTIVE ? "success" : "destructive"

@@ -4,9 +4,9 @@ import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
 import { WgPeerStatus } from "@/generated/prisma/enums"
 import { peerApi } from "../api"
 
-export async function togglePeerStatusAction(peerId: number) {
+export async function togglePeerStatusAction(dbPeerId: number) {
   try {
-    const peer = await peerRepository.findPeerById(peerId)
+    const peer = await peerRepository.findPeerById(dbPeerId)
     if (!peer) {
       return { success: false, message: "Конфигурация не найдена" }
     }
@@ -15,7 +15,7 @@ export async function togglePeerStatusAction(peerId: number) {
     const isDeactivating = currentStatus === WgPeerStatus.ACTIVE
 
     //меняем статус на сервере WG
-    await peerApi.changeEnable(peer.id, !isDeactivating)
+    await peerApi.changeEnable(peer.wgPeerId, !isDeactivating)
 
     //обновляем БД
     await peerRepository.updatePeerStatus(peer.id, !isDeactivating)

@@ -3,8 +3,8 @@ export function formatTraffic(bytes: number) {
 
   if (gb < 1) {
     const mb = bytes / 1024 ** 2
-    return `${mb.toFixed(2)} MB`
+    return `${mb.toFixed(2)} Mb`
   }
 
-  return `${gb.toFixed(2)} GB`
+  return `${gb.toFixed(2)} Gb`
 }

@@ -9,7 +9,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const peerId = Number((await params).id)
+    const wgPeerId = Number((await params).id)
     const authUser = await getUserSession()
     if (!authUser)
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function GET(
         { status: 401 }
       )
 
-    const peer = await peerRepository.findPeerByWgId(peerId)
+    const peer = await peerRepository.findPeerByWgId(wgPeerId)
     if (!peer)
       return NextResponse.json(
         { error: "Файлы vpn конфигурацый не найдены" },
@@ -25,7 +25,7 @@ export async function GET(
       )
 
     // Получаем конфиг напрямую из wg-rest-api
-    const config = await peerRepository.getWgServerPeerConfig(peerId)
+    const config = await peerRepository.getWgServerPeerConfig(wgPeerId)
     if (!config) {
       return NextResponse.json({
         success: false,

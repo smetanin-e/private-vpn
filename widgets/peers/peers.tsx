@@ -80,7 +80,8 @@ export const Peers: React.FC<Props> = () => {
                   name={peer.client.name}
                   description={peer.client.description}
                   balance={peer.client.balance}
-                  uid={peer.wgPeerId}
+                  dbPeerId={peer.id}
+                  clientId={peer.client.id}
                   status={peer.status}
                   isFree={peer.client.isFree}
                   tariff={peer.client.tariff}
