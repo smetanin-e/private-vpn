@@ -123,7 +123,7 @@ export function PeerCard({
           {/* Action Buttons */}
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
             <DownloadConf peerId={wgPeerId} peerName={`vpn${wgPeerId}`} />
-            <Qr peerId={wgPeerId} peerName={`UID:${wgPeerId}`} />
+            <Qr dbPeerId={dbPeerId} peerName={`UID:${dbPeerId}`} />
             <DeletePeer peerId={wgPeerId} />
           </div>
         </div>

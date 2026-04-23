@@ -38,9 +38,12 @@ export const peerRepository = {
   },
 
   // Получаем конфиг напрямую из wg-rest-api
-  async getWgServerPeerConfig(peerId: number): Promise<string | null> {
+  async getWgServerPeerConfig(
+    peerApiInstance: any,
+    peerId: number
+  ): Promise<string | null> {
     try {
-      const res = await peerApi.downloadPeerConfig(peerId)
+      const res = await peerApiInstance.downloadPeerConfig(peerId)
       return normalizeWgConfig(res.data)
     } catch (error) {
       console.error("[getWgServerPeerConfig] Server error", error)
@@ -51,6 +54,7 @@ export const peerRepository = {
   //добавляем пир из wg-rest-api в базу данных
   async createPeerDb(
     clientId: number,
+    wireguardServerId: number,
     peerName: string,
     wgPeerId: number,
     publicKey: string,
@@ -60,6 +64,7 @@ export const peerRepository = {
     return prisma.wireguardPeer.create({
       data: {
         clientId,
+        wireguardServerId,
         peerName,
         publicKey,
         privateKey,
@@ -74,6 +79,9 @@ export const peerRepository = {
   async findPeerById(peerId: number) {
     return prisma.wireguardPeer.findFirst({
       where: { id: peerId },
+      include: {
+        wireguardServer: true,
+      },
     })
   },
 

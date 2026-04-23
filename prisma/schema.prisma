@@ -19,6 +19,18 @@ model User {
     updatedAt DateTime @updatedAt
 }
 
+model WireguardServer {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+
+    description String
+
+    baseUrl  String
+    apiToken String
+
+    peers WireguardPeer[]
+}
+
 model WireguardPeer {
     id Int @id @default(autoincrement())
 
@@ -37,6 +49,11 @@ model WireguardPeer {
 
     client   Client @relation(fields: [clientId], references: [id])
     clientId Int    @unique
+
+    wireguardServer   WireguardServer? @relation(fields: [wireguardServerId], references: [id])
+    wireguardServerId Int?
+
+    @@unique([wireguardServerId, wgPeerId])
 }
 
 model Client {

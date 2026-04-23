@@ -5,15 +5,16 @@
 Сделано
 Удалить пир, если в бд не создадуться записи.
 
-Сделано
-Реализовать учет трафика
+
+Реализовать учет трафика - с учетом разных серверов
 Добавить тарификацию для каждого конфига
 
 Настроить пополнение с паролем
 Настроить списание средств и добавить страницу транзакций
 
-Исправить wgPeerId dbPeerId
-Исправить (платно/бесплатно вкл/выкл)
+
+
+Исправить (платно/бесплатно вкл/выкл) - с учетом серверов
 
 
 pnpm dlx prisma migrate dev --name init
@@ -22,3 +23,11 @@ pnpm dlx prisma generate
 pnpm dlx tsx prisma/script.ts
 
 tree -a -I "node_modules|.next|.git" --charset=ascii private-vpn > architecture.txt
+
+Где использовать api wg
+🔥 В sync:
+import { getPeerApi } from "@/features/wg/api/peer-api-cache"
+
+const api = getPeerApi(dbPeer.server)
+🔥 В createPeerAction:
+const api = getPeerApi(server)

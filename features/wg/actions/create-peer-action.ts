@@ -2,9 +2,11 @@
 import { clientRepository } from "@/entities/client/repository/client-repository"
 import { userRepository } from "@/entities/user/repository/user-repository"
 import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
-import { peerApi } from "../api"
+import { wgServerRepository } from "@/entities/wg-server/repository/wg-server-repository"
+import { createPeerApi } from "../api/create-peer-api"
 
 type CreatePeerData = {
+  server: number
   tariff: number
   clientName: string
   clientDescription: string
@@ -13,14 +15,22 @@ type CreatePeerData = {
 
 export async function createPeerAction(data: CreatePeerData) {
   let createdPeerId: number | null = null
+  let peerApiInstance: ReturnType<typeof createPeerApi> | null = null
   try {
     const user = await userRepository.findUserById(data.adminId)
     if (!user) {
       return { success: false, message: "Администратор не найден" }
     }
 
+    const server = await wgServerRepository.findById(data.server)
+    if (!server) {
+      return { success: false, message: "Сервер не найден" }
+    }
+
+    peerApiInstance = createPeerApi(server)
+
     // Создаём пира на wg-rest-api
-    const peer = await peerRepository.createPeerOnWgServer("wgconfig")
+    const { data: peer } = await peerApiInstance.create("wgconfig")
     if (!peer) {
       return { success: false, message: "Ошибка при создании пира сервере WG" }
     }
@@ -48,6 +58,7 @@ export async function createPeerAction(data: CreatePeerData) {
 
     await peerRepository.createPeerDb(
       client.id,
+      server.id,
       "wgconfig",
       peer.id,
       publicKey,
@@ -58,9 +69,9 @@ export async function createPeerAction(data: CreatePeerData) {
     return { success: true, message: "Пир успешно создан" }
   } catch (error) {
     // 💥 Удалить пир, если что-то пошло не так
-    if (createdPeerId) {
+    if (createdPeerId && peerApiInstance) {
       try {
-        await peerApi.delete(createdPeerId)
+        await peerApiInstance.delete(createdPeerId)
         console.log(`Rollback: peer ${createdPeerId} удалён`)
       } catch (deleteError) {
         console.error("Rollback failed: не удалось удалить пир", deleteError)

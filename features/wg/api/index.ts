@@ -1,2 +1,2 @@
 export * from "./peer.api"
-export * from "./wg-instance"
+export * from "./create-wg-client"

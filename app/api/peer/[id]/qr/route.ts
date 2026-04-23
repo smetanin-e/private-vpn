@@ -1,5 +1,6 @@
 import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
 import { getUserSession } from "@/features/auth/actions/get-user-session"
+import { createPeerApi } from "@/features/wg/api/create-peer-api"
 
 import { NextRequest, NextResponse } from "next/server"
 import QRCode from "qrcode"
@@ -9,7 +10,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const wgPeerId = Number((await params).id)
+    const dbPeerId = Number((await params).id)
     const authUser = await getUserSession()
     if (!authUser)
       return NextResponse.json(
@@ -17,15 +18,24 @@ export async function GET(
         { status: 401 }
       )
 
-    const peer = await peerRepository.findPeerByWgId(wgPeerId)
+    //TODO ПЕРЕДАВАТЬ ID ИЗ БД А НЕ ИЗ WG-REST-API,
+    //TODO ИСКАТЬ ПИРА В БАЗЕ ДАННЫХ И ПРОВЕРЯТЬ НА КАКОМ ОН СЕРВЕРЕ
+
+    const peer = await peerRepository.findPeerById(dbPeerId)
+    console.log(peer)
     if (!peer)
       return NextResponse.json(
         { error: "Файлы vpn конфигурацый не найдены" },
         { status: 404 }
       )
+    const peerApiInstance = createPeerApi(peer.wireguardServer!)
 
     // Получаем конфиг напрямую из wg-rest-api
-    const config = await peerRepository.getWgServerPeerConfig(wgPeerId)
+    const config = await peerRepository.getWgServerPeerConfig(
+      peerApiInstance,
+      peer.wgPeerId
+    )
+    console.log(config)
     if (!config) {
       return NextResponse.json({
         success: false,

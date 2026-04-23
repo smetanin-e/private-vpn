@@ -9,7 +9,9 @@ import { usePeerMutations } from "../model/hooks/use-peer-mutations"
 import {
   createPeerSchema,
   CreatePeerType,
-} from "@/features/schemas/create-peer-schema"
+} from "@/features/wg/model/schemas/create-peer-schema"
+import { useGetServers } from "@/entities/wg-server/hooks/use-get-servers"
+import { FormSelect } from "@/shared/components/form/form-select"
 
 interface Props {
   className?: string
@@ -19,13 +21,25 @@ interface Props {
 
 export const CreatePeerForm: React.FC<Props> = ({ setOpen, userId }) => {
   const { createPeer } = usePeerMutations()
+  const { data } = useGetServers()
+  const servers = data ?? []
   const form = useForm<CreatePeerType>({
     resolver: zodResolver(createPeerSchema),
   })
 
   const onSubmit = async (data: CreatePeerType) => {
     try {
-      await createPeer.mutateAsync({ ...data, adminId: userId })
+      console.log(data)
+
+      const payload = {
+        server: Number(data.server),
+        tariff: data.tariff,
+        clientName: data.clientName,
+        clientDescription: data.clientDescription,
+        adminId: userId,
+      }
+
+      await createPeer.mutateAsync(payload)
       setOpen(false)
     } catch (error) {
       console.error("Error [CREATE_PEER_FORM]", error)
@@ -34,6 +48,15 @@ export const CreatePeerForm: React.FC<Props> = ({ setOpen, userId }) => {
   return (
     <FormProvider {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="space-y-2">
+          <FormSelect
+            required
+            name="server"
+            id="server"
+            label="Сервер"
+            data={servers}
+          />
+        </div>
         <div className="space-y-2">
           <FormInput
             label="Имя клиента"

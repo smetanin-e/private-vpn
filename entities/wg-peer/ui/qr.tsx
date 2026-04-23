@@ -16,18 +16,19 @@ import { toast } from "sonner"
 import { showQrCode } from "@/features/wg/lib"
 
 interface Props {
-  peerId: number
+  dbPeerId: number
   peerName: string
 }
 
-export const Qr: React.FC<Props> = ({ peerId, peerName }: Props) => {
+export const Qr: React.FC<Props> = ({ dbPeerId, peerName }: Props) => {
   const [qrUrl, setQrUrl] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
 
   const fetchQr = async () => {
     try {
       setLoading(true)
-      const url = await showQrCode(peerId)
+      const url = await showQrCode(dbPeerId)
+      console.log(url)
       if (!url) {
         throw new Error("Не удалось загрузить QR-code")
       }
@@ -65,6 +66,19 @@ export const Qr: React.FC<Props> = ({ peerId, peerName }: Props) => {
         <DialogHeader>
           <DialogTitle>QR-код для {peerName}</DialogTitle>
         </DialogHeader>
+        <div className="flex flex-col items-center gap-3">
+          <img
+            src={`/api/peer/${dbPeerId}/qr`}
+            alt={`QR для ${peerName}`}
+            width={250}
+            height={250}
+            className="rounded-lg border shadow-md"
+          />
+
+          <p className="text-center text-sm text-muted-foreground">
+            Отсканируй этот QR-код в приложении WireGuard
+          </p>
+        </div>
 
         {qrUrl ? (
           <div className="flex flex-col items-center gap-3">
