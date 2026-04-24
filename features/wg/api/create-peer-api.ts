@@ -24,7 +24,10 @@ export function createPeerApi(server: WireguardServer): PeerApiType {
 
   return {
     async getConfigById(peerId: number) {
-      return client.get(`/api/clients/${peerId}`)
+      const res = await client.get<WireGuardPeerResponse>(
+        `/api/clients/${peerId}`
+      )
+      return res.data
     },
 
     async downloadPeerConfig(peerId: number) {

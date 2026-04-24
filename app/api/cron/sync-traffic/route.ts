@@ -1,4 +1,4 @@
-import { peerApi } from "@/features/wg/api"
+import { createPeerApi } from "@/features/wg/api/create-peer-api"
 import { prisma } from "@/shared/lib/prisma"
 import { validateCronToken } from "@/shared/lib/validate-cron-token"
 import { NextResponse } from "next/server"
@@ -20,15 +20,17 @@ export async function GET(req: Request) {
         publicKey: true,
         receivedBytes: true,
         sentBytes: true,
+        wireguardServer: true,
       },
     })
 
     await Promise.all(
       dbPeers.map(async (dbPeer) => {
         try {
-          const res = await peerApi.getConfigById(dbPeer.wgPeerId)
+          if (!dbPeer.wireguardServer) return
 
-          const wgPeer = res && res.data
+          const api = createPeerApi(dbPeer.wireguardServer)
+          const wgPeer = await api.getConfigById(dbPeer.wgPeerId)
           if (!wgPeer?.traffic) return
 
           const newReceivedBytes = wgPeer.traffic.received
