@@ -73,8 +73,9 @@ model Client {
 model BalanceTransaction {
     id Int @id @default(autoincrement())
 
-    amount Int
-    type   TransactionType
+    amount      Int
+    type        TransactionType
+    description String
 
     client   Client @relation(fields: [clientId], references: [id])
     clientId Int

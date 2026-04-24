@@ -17,6 +17,30 @@ export const clientRepository = {
     })
   },
 
+  async findClienWithRelations(clientId: number) {
+    return prisma.client.findFirst({
+      where: { id: clientId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        tariff: true,
+        balance: true,
+        peer: {
+          select: {
+            id: true,
+            wgPeerId: true,
+            wireguardServer: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    })
+  },
+
   async deleteClient(clientId: number) {
     return prisma.client.delete({
       where: { id: clientId },
