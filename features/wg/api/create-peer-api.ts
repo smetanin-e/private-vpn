@@ -1,7 +1,24 @@
 import { WireguardServer } from "@/generated/prisma/client"
 import { createWgClient } from "./create-wg-client"
+import { WireGuardPeerResponse } from "../model/types"
 
-export function createPeerApi(server: WireguardServer) {
+export type PeerApiType = {
+  getConfigById(peerId: number): Promise<WireGuardPeerResponse>
+
+  downloadPeerConfig(peerId: number): Promise<string>
+
+  create(name: string): Promise<WireGuardPeerResponse>
+
+  changeEnable(peerId: number, enable: boolean): Promise<WireGuardPeerResponse>
+
+  delete(peerId: number): Promise<void>
+
+  getConfig(peerId: number): Promise<Blob>
+
+  getQr(peerId: number): Promise<Blob>
+}
+
+export function createPeerApi(server: WireguardServer): PeerApiType {
   const client = createWgClient(server)
 
   return {
@@ -10,9 +27,11 @@ export function createPeerApi(server: WireguardServer) {
     },
 
     async downloadPeerConfig(peerId: number) {
-      return client.get(`/api/clients/${peerId}?format=conf`, {
+      const res = await client.get(`/api/clients/${peerId}?format=conf`, {
         responseType: "text",
       })
+
+      return res.data
     },
 
     async create(name: string) {

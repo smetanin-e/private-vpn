@@ -85,7 +85,6 @@ export const Peers: React.FC<Props> = () => {
                   status={peer.status}
                   isFree={peer.client.isFree}
                   tariff={peer.client.tariff}
-                  wgPeerId={peer.wgPeerId}
                   received={peer.receivedBytes}
                   sent={peer.sentBytes}
                 />

@@ -1,9 +1,10 @@
-import { peerApi } from "../api"
+import { clientAxiosInstance } from "@/shared/service/instance"
 
 export const downloadConfig = async (peerId: number, peerName: string) => {
   try {
-    const res = await peerApi.getConfig(peerId)
-
+    const res = await clientAxiosInstance.get(`/api/peer/${peerId}/config`, {
+      responseType: "blob",
+    })
     // создаём ссылку и скачиваем файл
     const url = window.URL.createObjectURL(res.data)
     const a = document.createElement("a")

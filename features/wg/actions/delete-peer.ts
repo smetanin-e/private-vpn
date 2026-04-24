@@ -1,12 +1,13 @@
 "use server"
 
 import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
-import { peerApi } from "../api"
 import { clientRepository } from "@/entities/client/repository/client-repository"
+import { wgServerRepository } from "@/entities/wg-server/repository/wg-server-repository"
+import { createPeerApi } from "../api/create-peer-api"
 
-export async function deletePeerAction(peerId: number) {
+export async function deletePeerAction(dbPeerId: number) {
   try {
-    const peer = await peerRepository.findPeerByWgId(peerId)
+    const peer = await peerRepository.findPeerById(dbPeerId)
     if (!peer) {
       return { success: false, message: "Конфигурация не найдена" }
     }
@@ -16,7 +17,15 @@ export async function deletePeerAction(peerId: number) {
       return { success: false, message: "Клиент не найден" }
     }
 
-    await peerApi.delete(peer.wgPeerId)
+    const server = await wgServerRepository.findById(peer.wireguardServerId)
+    if (!server) {
+      return { success: false, message: "Сервер не найден" }
+    }
+
+    const peerApiInstance = createPeerApi(server)
+
+    await peerApiInstance.delete(peer.wgPeerId)
+    //TODO Если база не доступна, то пир удалится на сервере, но останется в базе. Нужно как-то обрабатывать такие ситуации.
     await peerRepository.deletePeer(peer.id)
     await clientRepository.deleteClient(client.id)
 

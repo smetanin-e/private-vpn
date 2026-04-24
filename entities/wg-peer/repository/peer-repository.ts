@@ -1,8 +1,7 @@
-import { peerApi } from "@/features/wg/api"
-import { WireGuardPeerResponse } from "@/features/wg/model/types"
 import { normalizeWgConfig } from "../lib/normalize-config"
 import { prisma } from "@/shared/lib/prisma"
 import { WgPeerStatus } from "@/generated/prisma/enums"
+import { PeerApiType } from "@/features/wg/api/create-peer-api"
 
 const basePeerSelect = {
   id: true,
@@ -25,26 +24,14 @@ const basePeerSelect = {
 }
 
 export const peerRepository = {
-  async createPeerOnWgServer(
-    name: string
-  ): Promise<WireGuardPeerResponse | null> {
-    try {
-      const res = await peerApi.create(name)
-      return res.data
-    } catch (error) {
-      console.error("[createPeerOnWgServer] Server error", error)
-      return null
-    }
-  },
-
   // Получаем конфиг напрямую из wg-rest-api
   async getWgServerPeerConfig(
-    peerApiInstance: any,
+    peerApiInstance: PeerApiType,
     peerId: number
   ): Promise<string | null> {
     try {
-      const res = await peerApiInstance.downloadPeerConfig(peerId)
-      return normalizeWgConfig(res.data)
+      const config = await peerApiInstance.downloadPeerConfig(peerId)
+      return normalizeWgConfig(config)
     } catch (error) {
       console.error("[getWgServerPeerConfig] Server error", error)
       return null

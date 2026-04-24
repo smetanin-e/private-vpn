@@ -1,12 +1,12 @@
 "use server"
 
 import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
-import { peerApi } from "../api"
 import { clientRepository } from "@/entities/client/repository/client-repository"
 
 export async function toggleFreeModeAction(dbPeerId: number) {
   try {
     const peer = await peerRepository.findPeerById(dbPeerId)
+    console.log(peer)
     if (!peer) {
       return { success: false, message: "Конфигурация не найдена" }
     }
@@ -17,9 +17,6 @@ export async function toggleFreeModeAction(dbPeerId: number) {
     }
 
     const currentMode = client.isFree
-
-    //меняем статус на сервере WG
-    await peerApi.changeEnable(peer.wgPeerId, !currentMode)
 
     //обновляем БД
 

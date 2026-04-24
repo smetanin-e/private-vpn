@@ -18,11 +18,7 @@ export async function GET(
         { status: 401 }
       )
 
-    //TODO ПЕРЕДАВАТЬ ID ИЗ БД А НЕ ИЗ WG-REST-API,
-    //TODO ИСКАТЬ ПИРА В БАЗЕ ДАННЫХ И ПРОВЕРЯТЬ НА КАКОМ ОН СЕРВЕРЕ
-
     const peer = await peerRepository.findPeerById(dbPeerId)
-    console.log(peer)
     if (!peer)
       return NextResponse.json(
         { error: "Файлы vpn конфигурацый не найдены" },
@@ -35,7 +31,7 @@ export async function GET(
       peerApiInstance,
       peer.wgPeerId
     )
-    console.log(config)
+
     if (!config) {
       return NextResponse.json({
         success: false,

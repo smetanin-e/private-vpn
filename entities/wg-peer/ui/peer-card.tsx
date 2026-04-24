@@ -13,7 +13,6 @@ import { ChangeFreeMode } from "@/features/wg/ui/change-free-mode"
 import { formatTraffic } from "@/shared/lib/format-traffic"
 
 interface ClientCardProps {
-  wgPeerId: number
   dbPeerId: number
   clientId: number
   name: string
@@ -27,7 +26,6 @@ interface ClientCardProps {
 }
 
 export function PeerCard({
-  wgPeerId,
   clientId,
   name,
   description,
@@ -122,9 +120,9 @@ export function PeerCard({
 
           {/* Action Buttons */}
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
-            <DownloadConf peerId={wgPeerId} peerName={`vpn${wgPeerId}`} />
+            <DownloadConf peerId={dbPeerId} peerName={`vpn${dbPeerId}`} />
             <Qr dbPeerId={dbPeerId} peerName={`UID:${dbPeerId}`} />
-            <DeletePeer peerId={wgPeerId} />
+            <DeletePeer peerId={dbPeerId} />
           </div>
         </div>
       </div>

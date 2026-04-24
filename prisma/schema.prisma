@@ -51,7 +51,7 @@ model WireguardPeer {
     clientId Int    @unique
 
     wireguardServer   WireguardServer? @relation(fields: [wireguardServerId], references: [id])
-    wireguardServerId Int?
+    wireguardServerId Int
 
     @@unique([wireguardServerId, wgPeerId])
 }
