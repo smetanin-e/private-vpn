@@ -30,11 +30,8 @@ export const clientRepository = {
           select: {
             id: true,
             wgPeerId: true,
-            wireguardServer: {
-              select: {
-                name: true,
-              },
-            },
+            status: true,
+            wireguardServer: true,
           },
         },
       },

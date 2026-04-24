@@ -1,5 +1,4 @@
-import { createPeerApi } from "@/features/wg/api/create-peer-api"
-import { prisma } from "@/shared/lib/prisma"
+import { syncTraffic } from "@/features/wg/model/service/sync-traffic"
 import { validateCronToken } from "@/shared/lib/validate-cron-token"
 import { NextResponse } from "next/server"
 
@@ -13,49 +12,7 @@ export async function GET(req: Request) {
       )
     }
 
-    const dbPeers = await prisma.wireguardPeer.findMany({
-      select: {
-        id: true,
-        wgPeerId: true,
-        publicKey: true,
-        receivedBytes: true,
-        sentBytes: true,
-        wireguardServer: true,
-      },
-    })
-
-    await Promise.all(
-      dbPeers.map(async (dbPeer) => {
-        try {
-          if (!dbPeer.wireguardServer) return
-
-          const api = createPeerApi(dbPeer.wireguardServer)
-          const wgPeer = await api.getConfigById(dbPeer.wgPeerId)
-          if (!wgPeer?.traffic) return
-
-          const newReceivedBytes = wgPeer.traffic.received
-          const newSentBytes = wgPeer.traffic.sent
-
-          const receivedDiff = newReceivedBytes - dbPeer.receivedBytes
-          const sentDiff = newSentBytes - dbPeer.sentBytes
-
-          const safeReceivedDiff = Math.max(0, receivedDiff)
-          const safeSentDiff = Math.max(0, sentDiff)
-          if (safeReceivedDiff === 0 && safeSentDiff === 0) return
-
-          await prisma.wireguardPeer.update({
-            where: { id: dbPeer.id },
-            data: {
-              receivedBytes: newReceivedBytes,
-              sentBytes: newSentBytes,
-            },
-          })
-        } catch (error) {
-          console.error(`WG sync error for peer ${dbPeer.wgPeerId}`, error)
-        }
-      })
-    )
-
+    await syncTraffic()
     return NextResponse.json({
       success: true,
       message: "Трафик синхронизирован",

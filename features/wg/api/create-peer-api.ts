@@ -3,6 +3,8 @@ import { createWgClient } from "./create-wg-client"
 import { WireGuardPeerResponse } from "../model/types"
 
 export type PeerApiType = {
+  getAllPeers(): Promise<WireGuardPeerResponse[]>
+
   getConfigById(peerId: number): Promise<WireGuardPeerResponse>
 
   downloadPeerConfig(peerId: number): Promise<string>
@@ -23,6 +25,11 @@ export function createPeerApi(server: WireguardServer): PeerApiType {
   const client = createWgClient(server)
 
   return {
+    async getAllPeers(): Promise<WireGuardPeerResponse[]> {
+      const res = await client.get<WireGuardPeerResponse[]>(`/api/clients`)
+      return res.data
+    },
+
     async getConfigById(peerId: number) {
       const res = await client.get<WireGuardPeerResponse>(
         `/api/clients/${peerId}`

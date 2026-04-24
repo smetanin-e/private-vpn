@@ -2,6 +2,9 @@
 
 import { clientRepository } from "@/entities/client/repository/client-repository"
 import { transactionRepository } from "@/entities/transaction/repository/transaction-repository"
+import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
+import { createPeerApi } from "@/features/wg/api/create-peer-api"
+import { WgPeerStatus } from "@/generated/prisma/enums"
 
 type CreditBalanceData = {
   clientId: number
@@ -32,6 +35,16 @@ WG-Peer-ID: ${client.peer!.wgPeerId}.
       amount: parseInt(data.count),
       description: transactionDesctiption,
     })
+
+    if (client.peer?.status === WgPeerStatus.INACTIVE) {
+      //TODO Код используется в нескольких местах. Нужно оптимизировать
+      const peerApiInstance = createPeerApi(client.peer!.wireguardServer!)
+      //меняем статус на сервере WG
+      await peerApiInstance.changeEnable(client.peer!.wgPeerId, true)
+      //обновляем БД
+      await peerRepository.updatePeerStatus(client.peer.id, true)
+    }
+
     return { success: true }
   } catch (error) {
     console.error("Error [CREDIT_BALANCE_ACTION]", error)

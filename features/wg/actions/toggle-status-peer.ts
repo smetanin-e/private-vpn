@@ -19,6 +19,7 @@ export async function togglePeerStatusAction(dbPeerId: number) {
     if (!server) {
       return { success: false, message: "Сервер не найден" }
     }
+    //TODO Код используется в нескольких местах. Нужно оптимизировать
 
     const peerApiInstance = createPeerApi(server)
     //меняем статус на сервере WG
