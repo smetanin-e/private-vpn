@@ -29,4 +29,11 @@ export const clientRepository = {
       data: { isFree: isFree },
     })
   },
+
+  async updateBalance(clientId: number, newBalance: number) {
+    return prisma.client.update({
+      where: { id: clientId },
+      data: { balance: newBalance },
+    })
+  },
 }

@@ -7,7 +7,8 @@ export type PeerApiType = {
 
   downloadPeerConfig(peerId: number): Promise<string>
 
-  create(name: string): Promise<WireGuardPeerResponse>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  create(name: string): Promise<any>
 
   changeEnable(peerId: number, enable: boolean): Promise<WireGuardPeerResponse>
 

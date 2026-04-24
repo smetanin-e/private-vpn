@@ -1,7 +1,6 @@
 "use client"
 
-import { Plus } from "lucide-react"
-import { Badge, Button, Card, Label } from "@/shared/components/ui"
+import { Badge, Card, Label } from "@/shared/components/ui"
 import { WgLogo } from "@/shared/components"
 import { DownloadConf } from "./download-conf"
 import { Qr } from "./qr"
@@ -11,6 +10,7 @@ import { WgPeerStatus } from "@/generated/prisma/enums"
 import { cn } from "@/shared/lib/utils"
 import { ChangeFreeMode } from "@/features/wg/ui/change-free-mode"
 import { formatTraffic } from "@/shared/lib/format-traffic"
+import { CreditBalanceModal } from "@/features/client/ui/credit-balance-modal"
 
 interface ClientCardProps {
   dbPeerId: number
@@ -83,14 +83,7 @@ export function PeerCard({
                 {balance.toLocaleString("ru-RU")} ₽
               </p>
             </div>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => alert("Пополнение баланса в разработке")}
-            >
-              <Plus className="size-4" />
-              Пополнить
-            </Button>
+            <CreditBalanceModal clientId={clientId} />
           </div>
 
           {/* Toggles */}
