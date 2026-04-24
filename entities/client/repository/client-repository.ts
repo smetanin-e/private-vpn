@@ -1,3 +1,4 @@
+import { WgPeerStatus } from "@/generated/prisma/enums"
 import { prisma } from "@/shared/lib/prisma"
 
 export const clientRepository = {
@@ -27,6 +28,25 @@ export const clientRepository = {
         tariff: true,
         balance: true,
         peer: {
+          select: {
+            id: true,
+            wgPeerId: true,
+            status: true,
+            wireguardServer: true,
+          },
+        },
+      },
+    })
+  },
+
+  async findClientsForPayment() {
+    return prisma.client.findMany({
+      where: {
+        isFree: false,
+      },
+      include: {
+        peer: {
+          where: { status: WgPeerStatus.ACTIVE },
           select: {
             id: true,
             wgPeerId: true,

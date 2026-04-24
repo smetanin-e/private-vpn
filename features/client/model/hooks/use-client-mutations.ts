@@ -28,7 +28,11 @@ export const useClientMutations = () => {
     mutationFn: creditBalanceAction,
     onSuccess: async (res) => {
       if (res.success) {
-        await queryClient.invalidateQueries({ queryKey: ["peers"] })
+        Promise.all([
+          await queryClient.invalidateQueries({ queryKey: ["peers"] }),
+          await queryClient.invalidateQueries({ queryKey: ["peers-stats"] }),
+        ])
+
         toast.success("Баланс успешно пополнен")
       } else {
         toast.error(res.message || "Ошибка при пополнении баланса")

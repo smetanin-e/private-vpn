@@ -36,7 +36,7 @@ WG-Peer-ID: ${client.peer!.wgPeerId}.
       description: transactionDesctiption,
     })
 
-    if (client.peer?.status === WgPeerStatus.INACTIVE) {
+    if (client.peer?.status === WgPeerStatus.INACTIVE && newBalance > 0) {
       //TODO Код используется в нескольких местах. Нужно оптимизировать
       const peerApiInstance = createPeerApi(client.peer!.wireguardServer!)
       //меняем статус на сервере WG
