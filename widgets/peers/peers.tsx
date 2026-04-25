@@ -49,57 +49,40 @@ export const Peers: React.FC<Props> = () => {
         "relative min-h-80 max-w-full border-blue-600 bg-slate-800/50 backdrop-blur-sm"
       )}
     >
-      {status === "pending" ? (
-        <LoadingBounce />
-      ) : (
-        <>
-          <CardHeader className="mb-0 pb-0">
-            <CardTitle>Профили клиентов WireGuard</CardTitle>
+      <CardHeader>
+        <CardTitle className="flex justify-between">
+          <h2>Профили клиентов WireGuard</h2>
+          <CreatePeerModal className="" />
+        </CardTitle>
 
-            <div className="mb-4 flex-wrap space-y-4 text-sm sm:flex sm:items-center sm:justify-between sm:space-y-0 sm:space-x-6 md:flex-nowrap">
-              <div className="flex space-x-6">
-                Клиенты:
-                <PeersQuantity isLoading={isLoading} stats={stats} />
-              </div>
+        <div className="mb-4 flex space-x-6">
+          Клиенты:
+          <PeersQuantity isLoading={isLoading} stats={stats} />
+        </div>
 
-              <CreatePeerModal />
-            </div>
-            <SearchPeer
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
-            />
-          </CardHeader>
+        <SearchPeer searchValue={searchValue} setSearchValue={setSearchValue} />
+      </CardHeader>
 
-          {peers.length === 0 ? (
-            <EmptyData text="Нет конфигураций" />
-          ) : (
-            <CardContent className="space-y-2 p-1">
-              {peers.map((peer) => (
-                <PeerCard
-                  key={peer.id}
-                  name={peer.client.name}
-                  description={peer.client.description}
-                  balance={peer.client.balance}
-                  dbPeerId={peer.id}
-                  clientId={peer.client.id}
-                  status={peer.status}
-                  isFree={peer.client.isFree}
-                  tariff={peer.client.tariff}
-                  received={peer.receivedBytes}
-                  sent={peer.sentBytes}
-                />
-              ))}
+      <CardContent className="space-y-2 p-1">
+        {status === "pending" && peers.length === 0 ? (
+          <LoadingBounce />
+        ) : peers.length === 0 ? (
+          <EmptyData text="Нет конфигураций" />
+        ) : (
+          <>
+            {peers.map((peer) => (
+              <PeerCard key={peer.id} peer={peer} />
+            ))}
 
-              {hasNextPage && (
-                <ShowMore
-                  onClick={() => fetchNextPage()}
-                  disabled={isFetchingNextPage}
-                />
-              )}
-            </CardContent>
-          )}
-        </>
-      )}
+            {hasNextPage && (
+              <ShowMore
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+              />
+            )}
+          </>
+        )}
+      </CardContent>
     </Card>
   )
 }

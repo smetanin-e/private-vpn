@@ -1,4 +1,4 @@
-import { Client } from "@/generated/prisma/client"
+import { Client, WireguardServer } from "@/generated/prisma/client"
 import { WgPeerStatus } from "@/generated/prisma/enums"
 
 export type PeerQueryType = {
@@ -12,6 +12,7 @@ export type PeerQueryType = {
     Client,
     "id" | "name" | "description" | "isFree" | "balance" | "tariff"
   >
+  wireguardServer: Pick<WireguardServer, "name">
 }
 
 export interface WireguardServerPeer {

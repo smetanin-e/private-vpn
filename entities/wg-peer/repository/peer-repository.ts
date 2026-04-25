@@ -10,7 +10,11 @@ const basePeerSelect = {
   status: true,
   receivedBytes: true,
   sentBytes: true,
-
+  wireguardServer: {
+    select: {
+      name: true,
+    },
+  },
   client: {
     select: {
       id: true,
@@ -91,9 +95,34 @@ export const peerRepository = {
     return prisma.wireguardPeer.findMany({
       where: search
         ? {
-            client: {
-              name: { contains: search, mode: "insensitive" },
-            },
+            OR: [
+              {
+                client: {
+                  name: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              },
+              {
+                client: {
+                  description: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              },
+              // поиск по id (только если search — число)
+              ...(Number.isNaN(Number(search))
+                ? []
+                : [
+                    {
+                      client: {
+                        id: Number(search),
+                      },
+                    },
+                  ]),
+            ],
           }
         : {},
       select: basePeerSelect,
