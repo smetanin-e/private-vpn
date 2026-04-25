@@ -23,17 +23,9 @@ export async function creditBalanceAction(data: CreditBalanceData) {
     const newBalance = client.balance + parseInt(data.count)
     await clientRepository.updateBalance(data.clientId, newBalance)
 
-    //создаем транзакцию пополнения баланса
-    const transactionDesctiption = `Пополнение баланса на ${data.count} руб. 
-Клиент: ${client.name} (Client-ID: ${client.id}). 
-DB-Peer-ID: ${client.peer!.id}.
-WG-Peer-ID: ${client.peer!.wgPeerId}.
-Сервер: ${client.peer!.wireguardServer!.name}`
-
     await transactionRepository.createTopUp({
       clientId: data.clientId,
       amount: parseInt(data.count),
-      description: transactionDesctiption,
     })
 
     if (client.peer?.status === WgPeerStatus.INACTIVE && newBalance > 0) {

@@ -32,9 +32,8 @@ export async function dailyCharge() {
             prisma.balanceTransaction.create({
               data: {
                 clientId: client.id,
-                amount: -tariff,
+                amount: tariff,
                 type: TransactionType.DAILY_CHARGE,
-                description: `Клиент ${client.name}: DB-PEER-ID: ${client.peer.id} - Ежедневная плата за тариф ${tariff} руб.`,
               },
             }),
           ])

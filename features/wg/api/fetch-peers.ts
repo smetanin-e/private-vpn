@@ -3,7 +3,7 @@ import { clientAxiosInstance } from "@/shared/service/instance"
 
 interface FetchPeersParams {
   pageParam?: number // номер страницы для useInfiniteQuery
-  search?: string // строка поиска (только для админа)
+  search?: string //
 }
 
 export const fetchPeers = async ({

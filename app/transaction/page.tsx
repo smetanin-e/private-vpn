@@ -1,5 +1,6 @@
 import { getUserSession } from "@/features/auth/actions/get-user-session"
 import { Header } from "@/shared/components"
+import { Transactions } from "@/widgets/transactions/transactions"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -12,6 +13,7 @@ export default async function Page() {
       <Header userId={user.id} title="Личный кабинет" name={user.name} />
       <div></div>
       <Link href={"/dashboard"}>Клиенты</Link>
+      <Transactions />
     </div>
   )
 }

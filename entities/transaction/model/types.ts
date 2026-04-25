@@ -1,3 +1,4 @@
+import { BalanceTransaction, Client } from "@/generated/prisma/client"
 import { TransactionType } from "@/generated/prisma/enums"
 
 export type CreateTransactionDTO = {
@@ -8,6 +9,9 @@ export type CreateTransactionDTO = {
 
 export type TransactionTopUp = {
   clientId: number
-  description: string
   amount: number
+}
+
+export type TransactionDTO = BalanceTransaction & {
+  client: Pick<Client, "id" | "name">
 }
