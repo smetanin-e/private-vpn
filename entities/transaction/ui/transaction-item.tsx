@@ -12,28 +12,35 @@ interface Props {
 export const TransactionItem: React.FC<Props> = ({ icon, transaction }) => {
   return (
     <div className="mb-4 flex items-start gap-4">
-      {icon}
+      <div className="mt-2"> {icon}</div>
+
       <div className="flex-1">
         <div className="text-md gap-4 text-white">
           {transaction.type === TransactionType.TOP_UP ? (
             <>
-              <span className="text-green-400">
-                Пополнение счета в размере -
+              <span className="">Пополнение счета в размере - </span>
+              <span className="text-lg text-green-400">
+                {transaction.amount} ₽.
               </span>
-              <span>{transaction.amount} ₽.</span>
             </>
           ) : (
             <>
-              <span className="text-red-400">Списание средств в размере </span>
-              <span className="text-md">{transaction.amount} ₽.</span>
+              <span>Списание средств в размере - </span>
+              <span className="text-lg text-red-400">
+                {transaction.amount} ₽.
+              </span>
             </>
           )}
 
           <span> Клиент: </span>
-          <span className="text-orange-400">{transaction.client.name}.</span>
+          <span className="text-lg text-orange-400">
+            {transaction.client.name}.
+          </span>
 
           <span> Client ID: </span>
-          <span className="text-orange-400">{transaction.client.id} </span>
+          <span className="text-lg text-orange-400">
+            {transaction.client.id}{" "}
+          </span>
 
           <div className="text-xs text-slate-400">
             {formatDate(transaction.createdAt.toLocaleString())}
