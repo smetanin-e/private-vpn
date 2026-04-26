@@ -23,6 +23,7 @@ const basePeerSelect = {
       balance: true,
       isFree: true,
       tariff: true,
+      accessTokenId: true,
     },
   },
 }

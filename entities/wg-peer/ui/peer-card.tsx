@@ -12,8 +12,16 @@ import { ChangeFreeMode } from "@/features/wg/ui/change-free-mode"
 import { formatTraffic } from "@/shared/lib/format-traffic"
 import { CreditBalanceModal } from "@/features/client/ui/credit-balance-modal"
 import { PeerQueryType } from "../model/types"
+import { generateClientAccess } from "@/features/client/actions/generate-client-access"
+import { toast } from "sonner"
 
 export function PeerCard({ peer }: { peer: PeerQueryType }) {
+  const handleGenerate = async () => {
+    const res = await generateClientAccess(peer.client.id)
+    if (!res?.accessLink) return
+    await navigator.clipboard.writeText(res.accessLink)
+    toast.success("Ссылка скопирована в буфер обмена")
+  }
   return (
     <Card
       className={cn(
@@ -118,6 +126,13 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
           </div>
         </div>
       </div>
+      {!peer.client.accessTokenId && (
+        <button onClick={handleGenerate}>Создать ссылку</button>
+      )}
+
+      {peer.client.accessTokenId && (
+        <button onClick={handleGenerate}>Пересоздать ссылку</button>
+      )}
     </Card>
   )
 }

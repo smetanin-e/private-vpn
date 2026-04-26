@@ -46,6 +46,7 @@ export async function createPeerAction(data: CreatePeerData) {
     }
 
     // Создаем владельца конфига.
+
     const client = await clientRepository.createClient(
       data.clientName,
       data.clientDescription,

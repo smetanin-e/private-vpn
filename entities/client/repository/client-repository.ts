@@ -1,4 +1,5 @@
 import { WgPeerStatus } from "@/generated/prisma/enums"
+
 import { prisma } from "@/shared/lib/prisma"
 
 export const clientRepository = {
@@ -75,6 +76,26 @@ export const clientRepository = {
     return prisma.client.update({
       where: { id: clientId },
       data: { balance: newBalance },
+    })
+  },
+  async findByTokenId(accessTokenId: string) {
+    return prisma.client.findUnique({
+      where: { accessTokenId },
+      include: { peer: true },
+    })
+  },
+
+  async updateToken(
+    clientId: number,
+    accessTokenId: string,
+    accessTokenHash: string
+  ) {
+    return prisma.client.update({
+      where: { id: clientId },
+      data: {
+        accessTokenId,
+        accessTokenHash,
+      },
     })
   },
 }

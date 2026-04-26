@@ -10,7 +10,13 @@ export type PeerQueryType = {
   sentBytes: number
   client: Pick<
     Client,
-    "id" | "name" | "description" | "isFree" | "balance" | "tariff"
+    | "id"
+    | "name"
+    | "description"
+    | "isFree"
+    | "balance"
+    | "tariff"
+    | "accessTokenId"
   >
   wireguardServer: Pick<WireguardServer, "name">
 }

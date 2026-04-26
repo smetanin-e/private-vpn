@@ -66,6 +66,9 @@ model Client {
 
     createdAt DateTime @default(now())
 
+    accessTokenId   String? @unique
+    accessTokenHash String?
+
     peer                WireguardPeer?
     balanceTransactions BalanceTransaction[]
 }
