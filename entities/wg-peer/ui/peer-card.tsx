@@ -56,7 +56,7 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
           <div className="flex items-center gap-2 rounded py-1.5 sm:justify-start">
             <WgLogo width={25} height={25} />
             <Link href={`/peer/${peer.id}`}>
-              <span className="text-lg text-muted-foreground">Client ID:</span>
+              <span className="text-lg text-muted-foreground">Client ID: </span>
 
               <code className="truncate font-mono text-lg">
                 {peer.client.id}

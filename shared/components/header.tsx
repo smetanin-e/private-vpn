@@ -1,27 +1,21 @@
-import { Logout } from "@/features/auth"
-import { ChangePasswordModal } from "@/features/user/ui/change-password-modal"
-
 import React from "react"
+import { Menu } from "./menu"
+import Link from "next/link"
 
 interface Props {
   className?: string
   title: string
   name: string
   userId: number
+  links: React.ReactNode
 }
 
-export const Header: React.FC<Props> = ({ title, name, userId }) => {
+export const Header: React.FC<Props> = ({ title, name, userId, links }) => {
   return (
-    <div className="mb-4 flex-wrap md:mb-6 md:flex md:items-center md:justify-between md:space-x-4">
-      <h1 className="mb-2 text-center text-3xl font-bold md:text-left">
-        {title}
-      </h1>
+    <div className="mb-4 flex items-center justify-end gap-6 md:mb-6 md:justify-between md:space-x-4">
+      <h1 className="mb-2 text-3xl font-bold md:text-left">{title}</h1>
 
-      <div className="flex items-center justify-end space-x-4 md:justify-baseline">
-        <p className="text-lg text-white">{name}</p>
-        <ChangePasswordModal id={userId} />
-        <Logout />
-      </div>
+      <Menu userId={userId} name={name} links={links} />
     </div>
   )
 }

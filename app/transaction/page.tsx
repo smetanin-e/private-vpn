@@ -10,9 +10,14 @@ export default async function Page() {
 
   return (
     <div className="flex min-h-screen flex-col bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 p-4">
-      <Header userId={user.id} title="Личный кабинет" name={user.name} />
+      <Header
+        userId={user.id}
+        title="Панель транзакций"
+        name={user.name}
+        links={<Link href={"/dashboard"}>Панель управления</Link>}
+      />
       <div></div>
-      <Link href={"/dashboard"}>Клиенты</Link>
+
       <Transactions />
     </div>
   )

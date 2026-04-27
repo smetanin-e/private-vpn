@@ -22,7 +22,7 @@ export const CreateWgServerModal: React.FC<Props> = ({ className }) => {
     <div className={className}>
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>
-          <Button variant={"outline"} className="w-full sm:w-auto">
+          <Button variant={"outline"} size={"sm"} className="w-full sm:w-auto">
             Добавить сервер
           </Button>
         </DialogTrigger>
