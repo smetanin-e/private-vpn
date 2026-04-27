@@ -2,6 +2,7 @@ import { normalizeWgConfig } from "../lib/normalize-config"
 import { prisma } from "@/shared/lib/prisma"
 import { WgPeerStatus } from "@/generated/prisma/enums"
 import { PeerApiType } from "@/features/wg/api/create-peer-api"
+import { PeerQueryType } from "../model/types"
 
 const basePeerSelect = {
   id: true,
@@ -74,6 +75,33 @@ export const peerRepository = {
       include: {
         wireguardServer: true,
       },
+    })
+  },
+  // id: number
+  //   wgPeerId: number
+  //   peerName: string
+  //   status: WgPeerStatus
+  //   receivedBytes: number
+  //   sentBytes: number
+  //   client: Pick<
+  //     Client,
+  //     | "id"
+  //     | "name"
+  //     | "description"
+  //     | "isFree"
+  //     | "balance"
+  //     | "tariff"
+  //     | "accessTokenId"
+  //   >
+  //   wireguardServer: Pick<WireguardServer, "name">
+
+  // Поиск пира по id из БД c клиентом и сервером
+  async findPeerByIdWithRelations(
+    peerId: number
+  ): Promise<PeerQueryType | null> {
+    return prisma.wireguardPeer.findUnique({
+      where: { id: peerId },
+      select: basePeerSelect,
     })
   },
 

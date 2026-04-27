@@ -1,11 +1,12 @@
 import { getClientByToken } from "@/entities/client/model/lib/get-client-by-token"
 
-export default async function ClientPage({
+export default async function ClientInfoPage({
   params,
 }: {
-  params: { token: string }
+  params: Promise<{ token: string }>
 }) {
-  const token = (await params).token
+  const { token } = await params
+
   const client = await getClientByToken(token)
 
   if (!client) {

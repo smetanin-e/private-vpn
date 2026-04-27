@@ -1,27 +1,15 @@
 "use client"
 
-import { Badge, Card, Label } from "@/shared/components/ui"
+import { Badge, Card } from "@/shared/components/ui"
 import { WgLogo } from "@/shared/components"
-import { DownloadConf } from "./download-conf"
-import { Qr } from "./qr"
-import { DeletePeer } from "@/features/wg/ui/delete-peer"
-import { ChangePeerStatus } from "@/features/wg/ui/change-peer-status"
 import { WgPeerStatus } from "@/generated/prisma/enums"
 import { cn } from "@/shared/lib/utils"
-import { ChangeFreeMode } from "@/features/wg/ui/change-free-mode"
 import { formatTraffic } from "@/shared/lib/format-traffic"
-import { CreditBalanceModal } from "@/features/client/ui/credit-balance-modal"
 import { PeerQueryType } from "../model/types"
-import { generateClientAccess } from "@/features/client/actions/generate-client-access"
-import { toast } from "sonner"
+
+import Link from "next/link"
 
 export function PeerCard({ peer }: { peer: PeerQueryType }) {
-  const handleGenerate = async () => {
-    const res = await generateClientAccess(peer.client.id)
-    if (!res?.accessLink) return
-    await navigator.clipboard.writeText(res.accessLink)
-    toast.success("Ссылка скопирована в буфер обмена")
-  }
   return (
     <Card
       className={cn(
@@ -43,8 +31,40 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
             </span>
           </div>
 
+          <div className="flex gap-2">
+            <Badge variant={peer.client.isFree ? "success" : "destructive"}>
+              {peer.client.isFree ? "Бесплатный" : "Платный"}
+            </Badge>
+            <Badge
+              variant={
+                peer.status === WgPeerStatus.ACTIVE ? "success" : "destructive"
+              }
+            >
+              {peer.status === WgPeerStatus.ACTIVE ? "Активен" : "Отключен"}
+            </Badge>
+          </div>
+        </div>
+        {/*  Description */}
+        <p className="text-left text-sm text-muted-foreground">
+          {peer.client.description}
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-[1fr_auto]">
+        <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-[auto_1fr]">
+          {/* UID */}
+          <div className="flex items-center gap-2 rounded py-1.5 sm:justify-start">
+            <WgLogo width={25} height={25} />
+            <Link href={`/peer/${peer.id}`}>
+              <span className="text-lg text-muted-foreground">Client ID:</span>
+
+              <code className="truncate font-mono text-lg">
+                {peer.client.id}
+              </code>
+            </Link>
+          </div>
           {/* Trafic */}
-          <div>
+          <div className="text-left sm:text-right">
             {" "}
             <p className="text-xs">
               <span className="text-green-300">
@@ -58,30 +78,13 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
             <p className="text-xs text-gray-400">
               Сервер:{" "}
               <span className="text-orange-400">
-                {peer.wireguardServer.name}
+                {peer.wireguardServer!.name}
               </span>
             </p>
           </div>
-        </div>
-        {/*  Description */}
-        <p className="text-left text-sm text-muted-foreground">
-          {peer.client.description}
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-[1fr_auto]">
-        <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-[auto_1fr] md:grid-cols-[auto_1fr_auto_auto] md:gap-10">
-          {/* UID */}
-          <div className="flex items-center justify-center gap-2 rounded py-1.5 sm:justify-start">
-            <WgLogo width={25} height={25} />
-
-            <span className="text-lg text-muted-foreground">Client ID:</span>
-
-            <code className="truncate font-mono text-lg">{peer.client.id}</code>
-          </div>
 
           {/* Balance */}
-          <div className="flex items-center justify-between gap-3 sm:justify-end md:justify-start">
+          {/* <div className="flex items-center justify-between gap-3 sm:justify-end md:justify-start">
             <div className="flex items-center gap-4 sm:w-30">
               <p className="text-xs text-muted-foreground">Баланс</p>
               <p className="text-lg font-semibold tabular-nums">
@@ -89,10 +92,10 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
               </p>
             </div>
             <CreditBalanceModal clientId={peer.client.id} />
-          </div>
+          </div> */}
 
           {/* Toggles */}
-          <div className="flex gap-5 md:flex-col md:gap-2">
+          {/* <div className="flex gap-5 md:flex-col md:gap-2">
             <div className="flex items-center gap-2">
               <ChangeFreeMode id={peer.id} isFree={peer.client.isFree} />
               <Label htmlFor={`free-${peer.id}`}>
@@ -116,23 +119,23 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
                 </Badge>
               </Label>
             </div>
-          </div>
+          </div> */}
 
           {/* Action Buttons */}
-          <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
+          {/* <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
             <DownloadConf peerId={peer.id} peerName={`vpn${peer.id}`} />
             <Qr dbPeerId={peer.id} peerName={`UID:${peer.id}`} />
             <DeletePeer peerId={peer.id} />
-          </div>
+          </div> */}
         </div>
       </div>
-      {!peer.client.accessTokenId && (
+      {/* {!peer.client.accessTokenId && (
         <button onClick={handleGenerate}>Создать ссылку</button>
       )}
 
       {peer.client.accessTokenId && (
         <button onClick={handleGenerate}>Пересоздать ссылку</button>
-      )}
+      )} */}
     </Card>
   )
 }

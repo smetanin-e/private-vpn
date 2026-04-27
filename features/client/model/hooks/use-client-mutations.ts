@@ -9,7 +9,7 @@ export const useClientMutations = () => {
     mutationFn: toggleFreeModeAction,
     onSuccess: async (res) => {
       if (res.success) {
-        await queryClient.invalidateQueries({ queryKey: ["peers"] })
+        await queryClient.invalidateQueries({ queryKey: ["peer"] })
         toast.success("Статус тарифа успешно изменен")
       } else {
         toast.error(res.message || "Ошибка при изменении статуса тарифа")
@@ -29,8 +29,7 @@ export const useClientMutations = () => {
     onSuccess: async (res) => {
       if (res.success) {
         Promise.all([
-          await queryClient.invalidateQueries({ queryKey: ["peers"] }),
-          await queryClient.invalidateQueries({ queryKey: ["peers-stats"] }),
+          await queryClient.invalidateQueries({ queryKey: ["peer"] }),
         ])
 
         toast.success("Баланс успешно пополнен")

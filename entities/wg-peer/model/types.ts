@@ -18,7 +18,7 @@ export type PeerQueryType = {
     | "tariff"
     | "accessTokenId"
   >
-  wireguardServer: Pick<WireguardServer, "name">
+  wireguardServer: Pick<WireguardServer, "name"> | null
 }
 
 export interface WireguardServerPeer {

@@ -29,8 +29,6 @@ export const CreatePeerForm: React.FC<Props> = ({ setOpen, userId }) => {
 
   const onSubmit = async (data: CreatePeerType) => {
     try {
-      console.log(data)
-
       const payload = {
         server: Number(data.server),
         tariff: data.tariff,
