@@ -29,9 +29,14 @@
 
 План
 
-Переделать шапку (Добавить меню и спрятать лишнее)
-Переделать карточку (Убрать наляпистость, оставить основное, с возможностью
-    открыть карточку и видеть все. Добавить транзакции и историю трафика)
+    Сделано
+    Переделать шапку (Добавить меню и спрятать лишнее)
+
+    Сделано
+    Переделать карточку (Убрать наляпистость, оставить основное, с возможностью
+        открыть карточку и видеть все. )
+
+Добавить транзакции и историю трафика клиенту
 
 Создать логику хранения трафика по месяцам
 создать страницу просмотра - кто больше всего использует трафика
@@ -53,3 +58,12 @@ const api = getPeerApi(dbPeer.server)
 🔥 В createPeerAction:
 const api = getPeerApi(server)
 
+curl -X GET http://localhost:3000/api/cron/charge \
+-H "Authorization: Bearer super-secret-token"
+
+curl -X GET http://localhost:3000/api/cron/sync-traffic \
+-H "Authorization: Bearer super-secret-token"
+
+
+curl -X GET http://89.110.118.90:3010/api/clients/6 \
+-H "Authorization: Bearer fhfjd7kvnKHGFdfkd2fkjfhjkJjhfhdkl98438djfbvnc" \

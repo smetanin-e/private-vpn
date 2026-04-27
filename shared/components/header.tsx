@@ -1,6 +1,5 @@
 import React from "react"
 import { Menu } from "./menu"
-import Link from "next/link"
 
 interface Props {
   className?: string

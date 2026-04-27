@@ -62,6 +62,20 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
                 {peer.client.id}
               </code>
             </Link>
+            {/* Balance */}
+            <div className="ml-6 flex items-center justify-between gap-3 sm:justify-end md:justify-start">
+              <div className="flex items-center gap-4 sm:w-30">
+                <p className="text-muted-foreground">Баланс</p>
+                <p
+                  className={cn(
+                    "text-md font-semibold tabular-nums",
+                    peer.client.balance <= 0 ? "text-red-400" : "text-green-400"
+                  )}
+                >
+                  {peer.client.balance.toLocaleString("ru-RU")} ₽
+                </p>
+              </div>
+            </div>
           </div>
           {/* Trafic */}
           <div className="text-left sm:text-right">
@@ -82,17 +96,6 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
               </span>
             </p>
           </div>
-
-          {/* Balance */}
-          {/* <div className="flex items-center justify-between gap-3 sm:justify-end md:justify-start">
-            <div className="flex items-center gap-4 sm:w-30">
-              <p className="text-xs text-muted-foreground">Баланс</p>
-              <p className="text-lg font-semibold tabular-nums">
-                {peer.client.balance.toLocaleString("ru-RU")} ₽
-              </p>
-            </div>
-            <CreditBalanceModal clientId={peer.client.id} />
-          </div> */}
 
           {/* Toggles */}
           {/* <div className="flex gap-5 md:flex-col md:gap-2">

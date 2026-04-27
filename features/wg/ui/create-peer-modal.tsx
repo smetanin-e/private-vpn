@@ -25,6 +25,7 @@ export const CreatePeerModal: React.FC<Props> = ({ className }) => {
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>
           <Button
+            size={"sm"}
             variant={"outline"}
             disabled={isLoading}
             className="w-full sm:w-auto"

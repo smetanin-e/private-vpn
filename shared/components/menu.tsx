@@ -37,10 +37,7 @@ export const Menu: React.FC<Props> = ({ userId, name, links }) => {
               <Logout />
             </div>
           </PopoverTitle>
-          <PopoverDescription>
-            {" "}
-            <CreateWgServerModal />
-          </PopoverDescription>
+          <PopoverDescription> </PopoverDescription>
         </PopoverHeader>
         <div>{links}</div>
       </PopoverContent>

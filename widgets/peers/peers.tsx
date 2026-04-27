@@ -13,6 +13,7 @@ import { CreatePeerModal } from "@/features/wg/ui/create-peer-modal"
 import { useGetPeers, usePeersStats } from "@/entities/wg-peer/hooks"
 import { EmptyData, LoadingBounce, ShowMore } from "@/shared/components"
 import { PeersQuantity } from "@/entities/wg-peer/ui/peers-quantity"
+import { CreateWgServerModal } from "@/features/wg-server/ui/create-server-modal"
 
 interface Props {
   className?: string
@@ -52,7 +53,10 @@ export const Peers: React.FC<Props> = () => {
       <CardHeader>
         <CardTitle className="flex justify-between">
           <h2>Профили клиентов WireGuard</h2>
-          <CreatePeerModal className="" />
+          <div className="flex flex-col items-end gap-2">
+            <CreatePeerModal />
+            <CreateWgServerModal />
+          </div>
         </CardTitle>
 
         <div className="mb-4 flex space-x-6">
