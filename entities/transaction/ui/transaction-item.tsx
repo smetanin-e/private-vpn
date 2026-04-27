@@ -7,9 +7,14 @@ interface Props {
   className?: string
   icon: React.ReactNode
   transaction: TransactionDTO
+  clientId?: number
 }
 
-export const TransactionItem: React.FC<Props> = ({ icon, transaction }) => {
+export const TransactionItem: React.FC<Props> = ({
+  icon,
+  transaction,
+  clientId,
+}) => {
   return (
     <div className="mb-4 flex items-start gap-4">
       <div className="mt-2"> {icon}</div>
@@ -19,28 +24,25 @@ export const TransactionItem: React.FC<Props> = ({ icon, transaction }) => {
           {transaction.type === TransactionType.TOP_UP ? (
             <>
               <span className="">Пополнение счета в размере - </span>
-              <span className="text-lg text-green-400">
-                {transaction.amount} ₽.
-              </span>
+              <span className="text-green-400">{transaction.amount} ₽.</span>
             </>
           ) : (
             <>
               <span>Списание средств в размере - </span>
-              <span className="text-lg text-red-400">
-                {transaction.amount} ₽.
-              </span>
+              <span className="text-red-400">{transaction.amount} ₽.</span>
             </>
           )}
-
-          <span> Клиент: </span>
-          <span className="text-lg text-orange-400">
-            {transaction.client.name}.
-          </span>
-
-          <span> Client ID: </span>
-          <span className="text-lg text-orange-400">
-            {transaction.client.id}{" "}
-          </span>
+          {!clientId && (
+            <>
+              {" "}
+              <span> Клиент: </span>
+              <span className="text-orange-400">
+                {transaction.client.name}.
+              </span>
+              <span> Client ID: </span>
+              <span className="text-orange-400">{transaction.client.id} </span>
+            </>
+          )}
 
           <div className="text-xs text-slate-400">
             {formatDate(transaction.createdAt.toLocaleString())}

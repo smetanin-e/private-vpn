@@ -4,11 +4,13 @@ import { TransactionDTO } from "../model/types"
 interface FetchTransactionsParams {
   pageParam?: number // номер страницы для useInfiniteQuery
   search?: string
+  clientId?: number
 }
 
 export const fetchTransactions = async ({
   pageParam = 0,
   search = "",
+  clientId,
 }: FetchTransactionsParams): Promise<{
   transactions: TransactionDTO[]
   nextPage: number | undefined
@@ -19,6 +21,7 @@ export const fetchTransactions = async ({
   params.set("take", take.toString())
   params.set("skip", skip.toString())
   if (search.trim()) params.set("search", search.trim())
+  if (clientId) params.set("clientId", clientId.toString())
   const { data } = await clientAxiosInstance.get<TransactionDTO[]>(
     `/api/transaction?${params.toString()}`
   )

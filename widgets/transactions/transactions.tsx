@@ -18,18 +18,19 @@ import { SearchTransaction } from "@/entities/transaction/ui/search-transaction"
 
 interface Props {
   className?: string
+  clientId?: number
 }
 
-export const Transactions: React.FC<Props> = ({ className }) => {
+export const Transactions: React.FC<Props> = ({ className, clientId }) => {
   const [searchValue, setSearchValue] = React.useState("")
   const { data, hasNextPage, isLoading, fetchNextPage, isFetchingNextPage } =
-    useGetTransactions(searchValue)
+    useGetTransactions(searchValue, clientId)
   const transactions = data?.pages.flatMap((page) => page.transactions) ?? []
 
   return (
     <Card
       className={cn(
-        "relative border-slate-700 bg-slate-800/50 pb-1 backdrop-blur-sm",
+        "relative mx-2 border-slate-700 bg-slate-800/50 pb-1 backdrop-blur-sm",
         className
       )}
     >
@@ -38,10 +39,12 @@ export const Transactions: React.FC<Props> = ({ className }) => {
         <CardDescription className="text-slate-300">
           Фиксация пополнений и ежедневных списаний
         </CardDescription>
-        <SearchTransaction
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-        />
+        {!clientId && (
+          <SearchTransaction
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+          />
+        )}
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -63,6 +66,7 @@ export const Transactions: React.FC<Props> = ({ className }) => {
                       )
                     }
                     transaction={transaction}
+                    clientId={clientId}
                   />
                 ))}
               </div>

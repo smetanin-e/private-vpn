@@ -19,7 +19,16 @@ export async function GET(req: NextRequest) {
       ? parseInt(searchParams.get("skip")!, 10)
       : undefined
 
-    const transactions = await transactionRepository.getAll(search, take, skip)
+    const clientId = searchParams.get("clientId") // ← добавляем clientId
+      ? parseInt(searchParams.get("clientId")!, 10)
+      : undefined
+
+    const transactions = await transactionRepository.getAll(
+      search,
+      take,
+      skip,
+      clientId
+    )
     return NextResponse.json(transactions)
   } catch (error) {
     console.error("[API_GET_TRANSACTION] Server error", error)

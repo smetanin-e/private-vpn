@@ -3,30 +3,40 @@ import { TransactionTopUp } from "../model/types"
 import { TransactionType } from "@/generated/prisma/enums"
 
 export const transactionRepository = {
-  async getAll(search?: string, take?: number, skip?: number) {
-    return prisma.balanceTransaction.findMany({
-      where: search
-        ? {
-            OR: [
-              ...(Number.isNaN(Number(search))
-                ? []
-                : [
-                    {
-                      clientId: Number(search),
-                    },
-                  ]),
+  async getAll(
+    search?: string,
+    take?: number,
+    skip?: number,
+    clientId?: number
+  ) {
+    const where: any = {}
+    if (clientId) {
+      where.clientId = clientId // ← фильтрация по клиенту
+    }
 
+    if (search) {
+      where.OR = [
+        ...(Number.isNaN(Number(search))
+          ? []
+          : [
               {
-                client: {
-                  name: {
-                    contains: search,
-                    mode: "insensitive",
-                  },
-                },
+                clientId: Number(search),
               },
-            ],
-          }
-        : {},
+            ]),
+
+        {
+          client: {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        },
+      ]
+    }
+
+    return prisma.balanceTransaction.findMany({
+      where,
       take,
       skip,
       orderBy: {
