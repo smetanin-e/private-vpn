@@ -1,49 +1,53 @@
 # ---- Base ----
-FROM node:18-alpine AS base
+FROM node:22-slim AS base
 WORKDIR /app
+
+RUN npm install -g pnpm
 
 # ---- Dependencies ----
 FROM base AS deps
 
-COPY package.json package-lock.json ./
-RUN npm ci --no-audit --prefer-offline
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # ---- Builder ----
 FROM base AS builder
 WORKDIR /app
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npx prisma generate
+# Генерируем Prisma Client
+RUN pnpm prisma generate
 
-RUN npm run build
+# Собираем приложение
+RUN pnpm build
 
 # ---- Runner ----
 FROM base AS runner
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
 
-COPY package.json ./
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
 
-# Копируем node_modules. Теперь они не включают Prisma Client,
-# что правильно, так как он будет сгенерирован ниже.
-COPY --from=deps /app/node_modules ./node_modules
-
-# Копируем Prisma схему (Обязательно для генерации!)
-COPY prisma ./prisma
-
+# Права доступа
 RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
 EXPOSE 3000
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# 👇 КЛЮЧЕВАЯ ИСПРАВЛЕННАЯ ЧАСТЬ
-# Генерируем Prisma Client ПЕРЕД запуском приложения.
-CMD npx prisma generate && npm start
+CMD pnpm start

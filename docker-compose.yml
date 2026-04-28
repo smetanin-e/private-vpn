@@ -16,7 +16,7 @@ services:
         API_URL_SERVER: ${API_URL_SERVER}
         CRON_SECRET: ${CRON_SECRET}
         CREDIT_BALANCE_SECRET: ${CREDIT_BALANCE_SECRET}
-    container_name: next_app_vpn
+    container_name: private_vpn_app
     restart: always
     ports:
       - "3003:3000" # наружу -> внутрь

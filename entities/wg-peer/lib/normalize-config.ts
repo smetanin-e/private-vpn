@@ -9,10 +9,10 @@ export const normalizeWgConfig = (config: string) => {
     )
   }
   // Ищем строки вида "Endpoint = домен:порт" и заменяем порт 51820 на 51821
-  config = config.replace(
-    /Endpoint\s*=\s*([^:]+):51820/g,
-    "Endpoint = $1:51821"
-  )
+  //   config = config.replace(
+  //     /Endpoint\s*=\s*([^:]+):51820/g,
+  //     "Endpoint = $1:51821"
+  //   )
 
   // 🧩 Правильный AllowedIPs, чтобы локальная сеть не обрывалась
   const allowedIPs = "0.0.0.0/1, 128.0.0.0/1, ::/0"
