@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  next_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        API_URL_SERVER: ${API_URL_SERVER}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_API_READ_KEY: ${NEXT_PUBLIC_API_READ_KEY}
+        API_READ_KEY: ${API_READ_KEY}
+        DATABASE_URL: ${DATABASE_URL}
+        JWT_SECRET: ${JWT_SECRET}
+        WG_API_URL: ${WG_API_URL}
+        WG_API_TOKEN: ${WG_API_TOKEN}
+        INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN}
+        YOOKASSA_ID: ${YOOKASSA_ID}
+        YOOKASSA_API_KEY: ${YOOKASSA_API_KEY}
+        YOOKASSA_CALLBACK_URL: ${YOOKASSA_CALLBACK_URL}
+        CRON_SECRET_KEY: ${CRON_SECRET_KEY}
+    container_name: next_app_vpn
+    restart: always
+    ports:
+      - '3001:3000' # наружу -> внутрь
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      API_URL_SERVER: ${API_URL_SERVER}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_API_READ_KEY: ${NEXT_PUBLIC_API_READ_KEY}
+      API_READ_KEY: ${API_READ_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      WG_API_URL: ${WG_API_URL}
+      WG_API_TOKEN: ${WG_API_TOKEN}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN}
+      YOOKASSA_ID: ${YOOKASSA_ID}
+      YOOKASSA_API_KEY: ${YOOKASSA_API_KEY}
+      YOOKASSA_CALLBACK_URL: ${YOOKASSA_CALLBACK_URL}
+      CRON_SECRET_KEY: ${CRON_SECRET_KEY}

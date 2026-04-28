@@ -61,4 +61,10 @@ export const transactionRepository = {
       },
     })
   },
+
+  async deleteByClientId(clientId: number) {
+    return prisma.balanceTransaction.deleteMany({
+      where: { clientId },
+    })
+  },
 }

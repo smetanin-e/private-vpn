@@ -82,7 +82,7 @@ export function PeerCard({ peer }: { peer: PeerQueryType }) {
             {" "}
             <p className="text-xs">
               <span className="text-green-300">
-                ↓ {formatTraffic(peer.sentBytes)}
+                ↓ {formatTraffic(peer.sendBytes)}
               </span>
               <span className="text-red-300">
                 {" "}

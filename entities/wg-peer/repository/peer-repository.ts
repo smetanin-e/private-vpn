@@ -10,7 +10,7 @@ const basePeerSelect = {
   wgPeerId: true,
   status: true,
   receivedBytes: true,
-  sentBytes: true,
+  sendBytes: true,
   wireguardServer: {
     select: {
       name: true,
@@ -82,7 +82,7 @@ export const peerRepository = {
   //   peerName: string
   //   status: WgPeerStatus
   //   receivedBytes: number
-  //   sentBytes: number
+  //   sendBytes: number
   //   client: Pick<
   //     Client,
   //     | "id"

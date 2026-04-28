@@ -4,6 +4,7 @@ import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
 import { clientRepository } from "@/entities/client/repository/client-repository"
 import { wgServerRepository } from "@/entities/wg-server/repository/wg-server-repository"
 import { createPeerApi } from "../api/create-peer-api"
+import { transactionRepository } from "@/entities/transaction/repository/transaction-repository"
 
 export async function deletePeerAction(dbPeerId: number) {
   try {
@@ -27,6 +28,7 @@ export async function deletePeerAction(dbPeerId: number) {
     await peerApiInstance.delete(peer.wgPeerId)
     //TODO Если база не доступна, то пир удалится на сервере, но останется в базе. Нужно как-то обрабатывать такие ситуации.
     await peerRepository.deletePeer(peer.id)
+    await transactionRepository.deleteByClientId(client.id)
     await clientRepository.deleteClient(client.id)
 
     return { success: true }

@@ -43,12 +43,14 @@ model WireguardPeer {
 
     lastActivity  DateTime?
     receivedBytes Int       @default(0)
-    sentBytes     Int       @default(0)
+    sendBytes     Int       @default(0)
 
     createdAt DateTime @default(now())
 
     client   Client @relation(fields: [clientId], references: [id])
     clientId Int    @unique
+
+    monthlyStats PeerMonthlyStats[]
 
     wireguardServer   WireguardServer? @relation(fields: [wireguardServerId], references: [id])
     wireguardServerId Int
@@ -81,6 +83,20 @@ model BalanceTransaction {
 
     client   Client @relation(fields: [clientId], references: [id])
     clientId Int
+
+    createdAt DateTime @default(now())
+}
+
+//Модель для учета трафика по месяцам
+model PeerMonthlyStats {
+    id    Int      @id @default(autoincrement())
+    month DateTime
+
+    peerId Int
+    peer   WireguardPeer @relation(fields: [peerId], references: [id])
+
+    receivedBytes BigInt
+    sendBytes     BigInt
 
     createdAt DateTime @default(now())
 }

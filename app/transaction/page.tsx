@@ -1,6 +1,8 @@
 import { getUserSession } from "@/features/auth/actions/get-user-session"
 import { Header } from "@/shared/components"
+import { Button } from "@/shared/components/ui"
 import { Transactions } from "@/widgets/transactions/transactions"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -16,7 +18,15 @@ export default async function Page() {
         name={user.name}
         links={<Link href={"/dashboard"}>Панель управления</Link>}
       />
-      <div></div>
+      <div className="m-2">
+        <Link href={"/dashboard"}>
+          {" "}
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="h-4 w-4" />
+            На главную
+          </Button>
+        </Link>
+      </div>
 
       <Transactions />
     </div>

@@ -68,7 +68,7 @@ export function ClientCard({ id }: Props) {
             {" "}
             <p className="text-xs">
               <span className="text-green-300">
-                ↓ {formatTraffic(peer.sentBytes)}
+                ↓ {formatTraffic(peer.sendBytes)}
               </span>
               <span className="text-red-300">
                 {" "}

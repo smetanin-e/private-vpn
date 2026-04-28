@@ -7,7 +7,7 @@ export type PeerQueryType = {
   peerName: string
   status: WgPeerStatus
   receivedBytes: number
-  sentBytes: number
+  sendBytes: number
   client: Pick<
     Client,
     | "id"
