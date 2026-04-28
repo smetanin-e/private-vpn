@@ -14,7 +14,6 @@ export default async function PeerPage({
 }) {
   const { id } = await params
 
-  //TODO переделать получение пира через mutation
   const peer = await peerRepository.findPeerByIdWithRelations(Number(id))
 
   if (!peer) {

@@ -11,14 +11,10 @@ export default async function Page() {
     <div className="flex min-h-screen flex-col bg-linear-to-br from-slate-900 via-blue-900 to-slate-900">
       <div className="flex grow flex-col items-center justify-center">
         <h1 className="mb-4 text-center text-4xl font-bold md:text-5xl">
-          Добро пожаловать в сервис EsmetVPN!
+          app.esmet.store!
         </h1>
 
-        <p className="text-l mb-8 max-w-xl p-2 text-center text-gray-300">
-          Безопасный доступ к интернету для ограниченного круга пользователей.
-          Пожалуйста, войдите в систему, чтобы управлять своими настройками и
-          параметрами VPN.
-        </p>
+        <p className="text-l mb-8 max-w-xl p-2 text-center text-gray-300"></p>
 
         <AuthModal />
       </div>

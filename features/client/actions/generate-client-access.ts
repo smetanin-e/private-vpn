@@ -12,8 +12,7 @@ export async function generateClientAccess(clientId: number) {
 
   await clientRepository.updateToken(clientId, tokenId, hash)
 
-  //TODO ИСПРАВИТЬ ССЫЛКУ ПРИ ДЕПЛОЕ
   return {
-    accessLink: `http://localhost:3000/client/${fullToken}`,
+    accessLink: `https://app.esmet.store/client/${fullToken}`,
   }
 }
