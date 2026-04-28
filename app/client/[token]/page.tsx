@@ -8,16 +8,17 @@ export default async function ClientInfoPage({
   const { token } = await params
 
   const client = await getClientByToken(token)
-
+  console.log(client)
   if (!client) {
     return <div>Invalid link</div>
   }
 
   return (
     <div>
-      <h1>{client.name}</h1>
+      <h1>{client.id}</h1>
       <p>Balance: {client.balance}</p>
       <p>Status: {client.peer?.status}</p>
+      <p>Списание в день: {client.tariff}</p>
     </div>
   )
 }

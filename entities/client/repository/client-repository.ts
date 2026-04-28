@@ -81,7 +81,13 @@ export const clientRepository = {
   async findByTokenId(accessTokenId: string) {
     return prisma.client.findUnique({
       where: { accessTokenId },
-      include: { peer: true },
+      select: {
+        accessTokenHash: true,
+        balance: true,
+        id: true,
+        tariff: true,
+        peer: { select: { status: true } },
+      },
     })
   },
 

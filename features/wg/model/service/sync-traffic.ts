@@ -8,7 +8,7 @@ export async function syncTraffic() {
     const isFirstDayOfMonth = now.getDate() === 1
 
     // Получаем первый день текущего и прошлого месяца для корректной группировки
-    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+    // const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
 
     const dbPeers = await prisma.wireguardPeer.findMany({
@@ -63,8 +63,8 @@ export async function syncTraffic() {
                       data: {
                         peerId: dbPeer.id,
                         month: lastMonthStart,
-                        receivedBytes: dbPeer.receivedBytes, // Сохраняем накопленные за прошлый месяц данные
-                        sendBytes: dbPeer.sendBytes,
+                        receivedBytes: BigInt(dbPeer.receivedBytes), // конвертация в BigInt
+                        sendBytes: BigInt(dbPeer.sendBytes),
                       },
                     })
 

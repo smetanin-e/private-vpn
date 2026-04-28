@@ -12,5 +12,9 @@ export async function getClientByToken(token: string) {
 
   const isValid = await verifyToken(secret, client.accessTokenHash)
 
-  return isValid ? client : null
+  if (!isValid) return null
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { accessTokenHash, ...clientWithoutHash } = client
+  return clientWithoutHash
 }
