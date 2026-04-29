@@ -86,6 +86,7 @@ export const clientRepository = {
         balance: true,
         id: true,
         tariff: true,
+        isFree: true,
         peer: { select: { status: true } },
       },
     })

@@ -42,8 +42,8 @@ model WireguardPeer {
     status     WgPeerStatus @default(ACTIVE)
 
     lastActivity  DateTime?
-    receivedBytes Int       @default(0)
-    sendBytes     Int       @default(0)
+    receivedBytes BigInt    @default(0)
+    sendBytes     BigInt    @default(0)
 
     createdAt DateTime @default(now())
 

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "WireguardPeer" ALTER COLUMN "receivedBytes" SET DATA TYPE BIGINT,
+ALTER COLUMN "sendBytes" SET DATA TYPE BIGINT;

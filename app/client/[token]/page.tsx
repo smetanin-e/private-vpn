@@ -72,7 +72,10 @@ export default async function ClientInfoPage({
               </Badge>
             </div>
 
-            <p>Ежедневное списание в размере {client.tariff} ₽</p>
+            <p>
+              Ежедневное списание в размере{" "}
+              {client.isFree ? "Бесплатно" : `${client.tariff} ₽`}{" "}
+            </p>
           </CardContent>
           <CardFooter>
             <div>
