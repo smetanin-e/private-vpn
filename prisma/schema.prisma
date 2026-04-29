@@ -36,7 +36,7 @@ model WireguardPeer {
 
     wgPeerId   Int
     peerName   String
-    publicKey  String       @unique
+    publicKey  String
     privateKey String
     address    String
     status     WgPeerStatus @default(ACTIVE)
