@@ -29,6 +29,19 @@ const basePeerSelect = {
   },
 }
 
+function convertPeer(peer: any): PeerQueryType {
+  return {
+    id: peer.id,
+    wgPeerId: peer.wgPeerId,
+    peerName: peer.peerName,
+    status: peer.status,
+    receivedBytes: Number(peer.receivedBytes), // BigInt -> number
+    sendBytes: Number(peer.sendBytes), // BigInt -> number
+    client: peer.client,
+    wireguardServer: peer.wireguardServer,
+  }
+}
+
 export const peerRepository = {
   // Получаем конфиг напрямую из wg-rest-api
   async getWgServerPeerConfig(
@@ -96,13 +109,17 @@ export const peerRepository = {
   //   wireguardServer: Pick<WireguardServer, "name">
 
   // Поиск пира по id из БД c клиентом и сервером
+  // Поиск пира по id из БД c клиентом и сервером
   async findPeerByIdWithRelations(
     peerId: number
   ): Promise<PeerQueryType | null> {
-    return prisma.wireguardPeer.findUnique({
+    const peer = await prisma.wireguardPeer.findUnique({
       where: { id: peerId },
       select: basePeerSelect,
     })
+
+    if (!peer) return null
+    return convertPeer(peer)
   },
 
   // Поиск пира по id из WG REST API (wgPeerId)
@@ -120,8 +137,12 @@ export const peerRepository = {
   },
 
   //Получаем пиры из БД по поиску (имя)
-  async getAllPeersFiltered(search: string, take?: number, skip?: number) {
-    return prisma.wireguardPeer.findMany({
+  async getAllPeersFiltered(
+    search: string,
+    take?: number,
+    skip?: number
+  ): Promise<PeerQueryType[]> {
+    const peers = await prisma.wireguardPeer.findMany({
       where: search
         ? {
             OR: [
@@ -159,6 +180,9 @@ export const peerRepository = {
       take,
       skip,
     })
+
+    // Конвертируем все записи
+    return peers.map(convertPeer)
   },
 
   async countAllUsers() {
@@ -195,6 +219,20 @@ export const peerRepository = {
       where: { id: peerId },
       data: {
         status,
+      },
+    })
+  },
+
+  //Сырые данные с BigInt
+  async getRawPeerForSync(peerId: number) {
+    return prisma.wireguardPeer.findUnique({
+      where: { id: peerId },
+      select: {
+        id: true,
+        wgPeerId: true,
+        receivedBytes: true, // Здесь будет BigInt
+        sendBytes: true, // Здесь будет BigInt
+        wireguardServer: true,
       },
     })
   },

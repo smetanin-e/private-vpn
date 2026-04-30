@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    // 🧑‍💼 Админ → может фильтровать по имени/фамилии/login
     const peers = await peerRepository.getAllPeersFiltered(search, take, skip)
     return NextResponse.json(peers)
   } catch (error) {
