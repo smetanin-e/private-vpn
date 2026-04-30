@@ -29,6 +29,7 @@ const basePeerSelect = {
   },
 }
 
+//todo Убрать в lib
 function convertPeer(peer: any): PeerQueryType {
   return {
     id: peer.id,
@@ -176,7 +177,7 @@ export const peerRepository = {
           }
         : {},
       select: basePeerSelect,
-      orderBy: { createdAt: "desc" },
+      orderBy: { sendBytes: "desc" },
       take,
       skip,
     })
