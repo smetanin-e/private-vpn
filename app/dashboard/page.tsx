@@ -1,6 +1,6 @@
-import { getUserSession } from "@/features/auth/actions/get-user-session"
-import { Header } from "@/shared/components"
-import { Peers } from "@/widgets/peers/peers"
+import { getUserSession } from "@/src/features/auth/actions/get-user-session"
+import { Header } from "@/src/shared/components"
+import { Peers } from "@/src/widgets/peers/peers"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 

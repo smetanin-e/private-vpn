@@ -1,5 +1,5 @@
-import { syncTraffic } from "@/features/wg/model/service/sync-traffic"
-import { validateCronToken } from "@/shared/lib/validate-cron-token"
+import { syncTraffic } from "@/src/features/wg/model/service/sync-traffic"
+import { validateCronToken } from "@/src/shared/lib/validate-cron-token"
 import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {

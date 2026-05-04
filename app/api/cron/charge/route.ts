@@ -1,5 +1,5 @@
-import { dailyCharge } from "@/features/client/service/daily-charge"
-import { validateCronToken } from "@/shared/lib/validate-cron-token"
+import { dailyCharge } from "@/src/features/client/service/daily-charge"
+import { validateCronToken } from "@/src/shared/lib/validate-cron-token"
 import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {

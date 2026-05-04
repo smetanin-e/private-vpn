@@ -41,9 +41,9 @@ model WireguardPeer {
     address    String
     status     WgPeerStatus @default(ACTIVE)
 
-    lastActivity  DateTime?
-    receivedBytes BigInt    @default(0)
-    sendBytes     BigInt    @default(0)
+    lastActivity  String?
+    receivedBytes BigInt  @default(0)
+    sendBytes     BigInt  @default(0)
 
     createdAt DateTime @default(now())
 

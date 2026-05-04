@@ -1,6 +1,6 @@
-import { getClientByToken } from "@/entities/client/model/lib/get-client-by-token"
+import { getClientByToken } from "@/src/entities/client/model/lib/get-client-by-token"
 import { WgPeerStatus } from "@/generated/prisma/enums"
-import { WgLogo } from "@/shared/components"
+import { WgLogo } from "@/src/shared/components"
 import {
   Badge,
   Card,
@@ -9,8 +9,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/shared/components/ui"
-import { cn } from "@/shared/lib/utils"
+} from "@/src/shared/components/ui"
+import { cn } from "@/src/shared/lib/utils"
 
 export default async function ClientInfoPage({
   params,

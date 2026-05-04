@@ -1,9 +1,10 @@
-import { ClientCard } from "@/entities/client/ui/client-card"
-import { ClientLink } from "@/entities/client/ui/client-link"
-import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
-import { WgLogo } from "@/shared/components"
-import { Button } from "@/shared/components/ui"
-import { Transactions } from "@/widgets/transactions/transactions"
+import { ClientCard } from "@/src/entities/client/ui/client-card"
+import { ClientLink } from "@/src/entities/client/ui/client-link"
+import { MonthlyStats } from "@/src/entities/traffic/ui/monthly-stats"
+import { peerRepository } from "@/src/entities/wg-peer/repository/peer-repository"
+import { WgLogo } from "@/src/shared/components"
+import { Button } from "@/src/shared/components/ui"
+import { Transactions } from "@/src/widgets/transactions/transactions"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
@@ -34,7 +35,7 @@ export default async function PeerPage({
           {" "}
           <Button variant="outline" size="sm">
             <ArrowLeft className="h-4 w-4" />
-            На главную
+            Назад
           </Button>
         </Link>
 
@@ -42,6 +43,8 @@ export default async function PeerPage({
       </div>
 
       <ClientCard id={peer.id} />
+      {/* Статистика трафика */}
+      <MonthlyStats peerId={peer.id} />
       <Transactions clientId={peer.client.id} />
     </div>
   )

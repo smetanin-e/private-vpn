@@ -1,6 +1,0 @@
-export { PeerCard } from "./peer-card"
-export { DownloadConf } from "./download-conf"
-export { SearchPeer } from "./search-peer"
-export { PeerCardHeader } from "./peer-card-header"
-export { PeerCardContent } from "./peer-card-content"
-export { PeerActions } from "./peer-actions"

@@ -1,5 +1,5 @@
-import { wgServerRepository } from "@/entities/wg-server/repository/wg-server-repository"
-import { validateApiToken } from "@/shared/lib/validate-api-token"
+import { wgServerRepository } from "@/src/entities/wg-server/repository/wg-server-repository"
+import { validateApiToken } from "@/src/shared/lib/validate-api-token"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {

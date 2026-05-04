@@ -1,5 +1,5 @@
-import { AuthModal } from "@/entities/user/ui/auth-modal"
-import { getUserSession } from "@/features/auth/actions/get-user-session"
+import { AuthModal } from "@/src/entities/user/ui/auth-modal"
+import { getUserSession } from "@/src/features/auth/actions/get-user-session"
 import { redirect } from "next/navigation"
 
 export default async function Page() {

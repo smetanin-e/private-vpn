@@ -1,0 +1,99 @@
+"use client"
+import React from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+import { Button } from "@/src/shared/components/ui"
+import { FormInput, FormTextarea } from "@/src/shared/components/form"
+import { usePeerMutations } from "../model/hooks/use-peer-mutations"
+import {
+  createPeerSchema,
+  CreatePeerType,
+} from "@/src/features/wg/model/schemas/create-peer-schema"
+import { useGetServers } from "@/src/entities/wg-server/hooks/use-get-servers"
+import { FormSelect } from "@/src/shared/components/form/form-select"
+
+interface Props {
+  className?: string
+  userId: number
+  setOpen: (open: boolean) => void
+}
+
+export const CreatePeerForm: React.FC<Props> = ({ setOpen, userId }) => {
+  const { createPeer } = usePeerMutations()
+  const { data } = useGetServers()
+  const servers = data ?? []
+  const form = useForm<CreatePeerType>({
+    resolver: zodResolver(createPeerSchema),
+  })
+
+  const onSubmit = async (data: CreatePeerType) => {
+    try {
+      const payload = {
+        server: Number(data.server),
+        tariff: data.tariff,
+        clientName: data.clientName,
+        clientDescription: data.clientDescription,
+        adminId: userId,
+      }
+
+      await createPeer.mutateAsync(payload)
+      setOpen(false)
+    } catch (error) {
+      console.error("Error [CREATE_PEER_FORM]", error)
+    }
+  }
+  return (
+    <FormProvider {...form}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="space-y-2">
+          <FormSelect
+            required
+            name="server"
+            id="server"
+            label="Сервер"
+            data={servers}
+          />
+        </div>
+        <div className="space-y-2">
+          <FormInput
+            label="Имя клиента"
+            name="clientName"
+            id="clientName"
+            type="text"
+            placeholder="Введите имя клиента"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <FormTextarea
+            label="Описание"
+            name="clientDescription"
+            id="clientDescription"
+            placeholder="Введите описание"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <FormInput
+            label="Тариф"
+            name="tariff"
+            id="tariff"
+            type="text"
+            placeholder="Списние за один день. Например: 4 | 5 | 7"
+            required
+          />
+        </div>
+
+        <Button
+          disabled={form.formState.isSubmitting}
+          className="mt-2 w-full"
+          type="submit"
+        >
+          {form.formState.isSubmitting ? "Создание конфигурации" : "Создать"}
+        </Button>
+      </form>
+    </FormProvider>
+  )
+}

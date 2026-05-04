@@ -1,7 +1,8 @@
-import { getUserSession } from "@/features/auth/actions/get-user-session"
-import { Header } from "@/shared/components"
-import { Button } from "@/shared/components/ui"
-import { Transactions } from "@/widgets/transactions/transactions"
+import { MonthlyStats } from "@/src/entities/traffic/ui/monthly-stats"
+import { getUserSession } from "@/src/features/auth/actions/get-user-session"
+import { Header } from "@/src/shared/components"
+import { Button } from "@/src/shared/components/ui"
+import { Transactions } from "@/src/widgets/transactions/transactions"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -29,6 +30,7 @@ export default async function Page() {
       </div>
 
       <Transactions />
+      <MonthlyStats />
     </div>
   )
 }

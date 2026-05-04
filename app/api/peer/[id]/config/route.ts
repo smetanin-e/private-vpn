@@ -1,6 +1,6 @@
-import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
-import { getUserSession } from "@/features/auth/actions/get-user-session"
-import { createPeerApi } from "@/features/wg/api/create-peer-api"
+import { peerRepository } from "@/src/entities/wg-peer/repository/peer-repository"
+import { getUserSession } from "@/src/features/auth/actions/get-user-session"
+import { createPeerApi } from "@/src/features/wg/api/create-peer-api"
 
 import { NextRequest, NextResponse } from "next/server"
 

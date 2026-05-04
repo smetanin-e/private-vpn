@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { peerRepository } from "@/entities/wg-peer/repository/peer-repository"
+import { peerRepository } from "@/src/entities/wg-peer/repository/peer-repository"
 
 export async function GET(
   req: NextRequest,

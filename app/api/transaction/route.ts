@@ -1,5 +1,5 @@
-import { transactionRepository } from "@/entities/transaction/repository/transaction-repository"
-import { validateApiToken } from "@/shared/lib/validate-api-token"
+import { transactionRepository } from "@/src/entities/transaction/repository/transaction-repository"
+import { validateApiToken } from "@/src/shared/lib/validate-api-token"
 
 import { NextRequest, NextResponse } from "next/server"
 

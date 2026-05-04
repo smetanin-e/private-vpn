@@ -1,7 +1,7 @@
 import "./globals.css"
 import { Geist, Geist_Mono } from "next/font/google"
-import { cn } from "@/shared/lib/utils"
-import { Providers } from "@/shared/components/providers"
+import { cn } from "@/src/shared/lib/utils"
+import { Providers } from "@/src/shared/components/providers"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
