@@ -1,8 +1,8 @@
+import { topUpAction } from "@/src/features/transaction/actions/top-up.action.ts"
 import { toggleFreeModeAction } from "@/src/features/wg/actions/toggle-free-mode"
 import { queryClient } from "@/src/shared/lib/query-client"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { creditBalanceAction } from "../../actions/credit-balance"
 
 export const useClientMutations = () => {
   const toggleFreeMode = useMutation({
@@ -28,7 +28,7 @@ export const useClientMutations = () => {
   })
 
   const creditBalance = useMutation({
-    mutationFn: creditBalanceAction,
+    mutationFn: topUpAction,
     onSuccess: async (res) => {
       if (res.success) {
         Promise.all([

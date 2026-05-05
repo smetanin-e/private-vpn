@@ -62,6 +62,8 @@ export const transactionRepository = {
     })
   },
 
+  async createDailyCharge() {},
+
   async deleteByClientId(clientId: number) {
     return prisma.balanceTransaction.deleteMany({
       where: { clientId },

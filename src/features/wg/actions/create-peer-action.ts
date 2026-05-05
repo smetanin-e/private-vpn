@@ -30,7 +30,7 @@ export async function createPeerAction(data: CreatePeerData) {
     peerApiInstance = createPeerApi(server)
 
     // Создаём пира на wg-rest-api
-    const { data: peer } = await peerApiInstance.create("wgconfig")
+    const peer = await peerApiInstance.create("wgconfig")
     if (!peer) {
       return { success: false, message: "Ошибка при создании пира сервере WG" }
     }
@@ -42,6 +42,8 @@ export async function createPeerAction(data: CreatePeerData) {
     const address = peer.address
 
     if (!privateKey || !publicKey || !address) {
+      // Логируем, что именно отсутствует
+      console.error("Invalid peer data from WG API:", peer)
       throw new Error("Некорректные данные от WG API")
     }
 

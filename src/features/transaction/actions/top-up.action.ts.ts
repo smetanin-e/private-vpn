@@ -11,7 +11,7 @@ type CreditBalanceData = {
   count: string
   key: string
 }
-export async function creditBalanceAction(data: CreditBalanceData) {
+export async function topUpAction(data: CreditBalanceData) {
   try {
     const client = await clientRepository.findClienWithRelations(data.clientId)
     if (!client) {
@@ -29,7 +29,7 @@ export async function creditBalanceAction(data: CreditBalanceData) {
     })
 
     if (client.peer?.status === WgPeerStatus.INACTIVE && newBalance > 0) {
-      const peerApiInstance = createPeerApi(client.peer!.wireguardServer!)
+      const peerApiInstance = createPeerApi(client.peer.wireguardServer!)
       //меняем статус на сервере WG
       await peerApiInstance.changeEnable(client.peer!.wgPeerId, true)
       //обновляем БД
