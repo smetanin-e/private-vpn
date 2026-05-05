@@ -1,19 +1,22 @@
 import { peerRepository } from "@/src/entities/wg-peer/repository/peer-repository"
 import { NextRequest, NextResponse } from "next/server"
 import { getUserSession } from "@/src/features/auth/actions/get-user-session"
-import { validateApiToken } from "@/src/shared/lib/validate-api-token"
 
 type SortField = "balance" | "lastActivity" | "sendBytes"
 type SortOrder = "asc" | "desc"
 
 export async function GET(req: NextRequest) {
-  const isValid = validateApiToken(req)
-
-  if (!isValid) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
   try {
+    // 1. Проверка сессии пользователя — вместо статического токена
+    const user = await getUserSession()
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized — user not found" },
+        { status: 401 }
+      )
+    }
+
+    // 2. Парсинг параметров
     const { searchParams } = new URL(req.url)
 
     const search = searchParams.get("search")?.trim() || ""
@@ -24,7 +27,7 @@ export async function GET(req: NextRequest) {
       ? parseInt(searchParams.get("skip")!, 10)
       : undefined
 
-    // Приведение типов с валидацией
+    // Валидация sortField
     let sortField: SortField = "sendBytes"
     const rawSortField = searchParams.get("sortField")
     if (
@@ -35,18 +38,11 @@ export async function GET(req: NextRequest) {
       sortField = rawSortField
     }
 
+    // Валидация sortOrder
     let sortOrder: SortOrder = "desc"
     const rawSortOrder = searchParams.get("sortOrder")
     if (rawSortOrder === "asc" || rawSortOrder === "desc") {
       sortOrder = rawSortOrder
-    }
-
-    const user = await getUserSession()
-    if (!user) {
-      return NextResponse.json(
-        { error: "Ошибка - пользователь не найден" },
-        { status: 401 }
-      )
     }
 
     const peers = await peerRepository.getAllPeersFiltered(

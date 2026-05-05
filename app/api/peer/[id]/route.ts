@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { peerRepository } from "@/src/entities/wg-peer/repository/peer-repository"
+import { getUserSession } from "@/src/features/auth/actions/get-user-session"
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getUserSession()
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const dbPeerId = Number((await params).id)
 
     const peer = await peerRepository.findPeerByIdWithRelations(dbPeerId)

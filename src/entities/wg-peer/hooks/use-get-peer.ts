@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { clientAxiosInstance } from "@/src/shared/service/instance"
 import { PeerQueryType } from "../model/types"
+import { clientAxiosInstance } from "@/src/shared/api/client"
 
 export const useGetPeer = (id: number) => {
   return useQuery({
@@ -8,7 +8,7 @@ export const useGetPeer = (id: number) => {
     queryFn: async () => {
       try {
         const { data } = await clientAxiosInstance.get<PeerQueryType>(
-          `/api/peer/${id}`
+          `/peer/${id}`
         )
         return data
       } catch (error) {
