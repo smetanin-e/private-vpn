@@ -9,7 +9,10 @@ export async function GET(
   try {
     const user = await getUserSession()
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json(
+        { error: "Unauthorized — user not found" },
+        { status: 401 }
+      )
     }
 
     const dbPeerId = Number((await params).id)

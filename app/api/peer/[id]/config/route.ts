@@ -9,20 +9,20 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const dbPeerId = Number((await params).id)
-
     const authUser = await getUserSession()
     if (!authUser)
       return NextResponse.json(
-        { error: "Пользователь не авторизован" },
+        { error: "Unauthorized — user not found" },
         { status: 401 }
       )
+
+    const dbPeerId = Number((await params).id)
 
     const peer = await peerRepository.findPeerById(dbPeerId)
 
     if (!peer)
       return NextResponse.json(
-        { error: "Файлы vpn конфигурацый не найдены" },
+        { error: "Файл vpn конфигурации не найден" },
         { status: 404 }
       )
 

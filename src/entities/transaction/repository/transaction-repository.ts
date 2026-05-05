@@ -1,6 +1,8 @@
 import { prisma } from "@/src/shared/lib/prisma"
 import { TransactionTopUp } from "../model/types"
 import { TransactionType } from "@/generated/prisma/enums"
+import { BalanceTransactionWhereInput } from "@/generated/prisma/models"
+import { Prisma } from "@/generated/prisma/client"
 
 export const transactionRepository = {
   async getAll(
@@ -9,21 +11,13 @@ export const transactionRepository = {
     skip?: number,
     clientId?: number
   ) {
-    const where: any = {}
+    const where: BalanceTransactionWhereInput = {}
     if (clientId) {
       where.clientId = clientId // ← фильтрация по клиенту
     }
 
     if (search) {
-      where.OR = [
-        ...(Number.isNaN(Number(search))
-          ? []
-          : [
-              {
-                clientId: Number(search),
-              },
-            ]),
-
+      const orConditions: Prisma.BalanceTransactionWhereInput[] = [
         {
           client: {
             name: {
@@ -33,6 +27,12 @@ export const transactionRepository = {
           },
         },
       ]
+      // Добавляем поиск по clientId, если search является числом
+      const numericSearch = Number(search)
+      if (!Number.isNaN(numericSearch)) {
+        orConditions.unshift({ clientId: numericSearch })
+      }
+      where.OR = orConditions
     }
 
     return prisma.balanceTransaction.findMany({

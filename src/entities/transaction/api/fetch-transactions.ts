@@ -1,8 +1,8 @@
-import { clientAxiosInstance } from "@/src/shared/service/instance"
+import { clientAxiosInstance } from "@/src/shared/api/client"
 import { TransactionDTO } from "../model/types"
 
 interface FetchTransactionsParams {
-  pageParam?: number // номер страницы для useInfiniteQuery
+  pageParam?: number
   search?: string
   clientId?: number
 }
@@ -22,13 +22,10 @@ export const fetchTransactions = async ({
   params.set("skip", skip.toString())
   if (search.trim()) params.set("search", search.trim())
   if (clientId) params.set("clientId", clientId.toString())
-  const { data } = await clientAxiosInstance.get<TransactionDTO[]>(
-    `/api/transaction?${params.toString()}`
-  )
 
-  if (!data) {
-    throw new Error("Ошибка при загрузке транзакций")
-  }
+  const { data } = await clientAxiosInstance.get<TransactionDTO[]>(
+    `/transactions?${params.toString()}`
+  )
 
   const hasMore = data.length === take
   return {
