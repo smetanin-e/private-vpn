@@ -5,11 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from "@/src/shared/components/ui"
 import { FormInput } from "@/src/shared/components/form"
-import {
-  creditBalanceSchema,
-  CreditBalanceType,
-} from "../model/schemas/credit-balance-schema"
-import { useClientMutations } from "../model/hooks/use-client-mutations"
+import { TopUpSchema, TopUpType } from "../model/schemas/top-up-schema"
+import { useTransactionMutations } from "../model/hooks/use-transaction-mutations"
 
 interface Props {
   className?: string
@@ -17,16 +14,16 @@ interface Props {
   setOpen: (open: boolean) => void
 }
 
-export const CreditBalanceForm: React.FC<Props> = ({ setOpen, clientId }) => {
-  const { creditBalance } = useClientMutations()
+export const TopUpForm: React.FC<Props> = ({ setOpen, clientId }) => {
+  const { topUp } = useTransactionMutations()
 
-  const form = useForm<CreditBalanceType>({
-    resolver: zodResolver(creditBalanceSchema),
+  const form = useForm<TopUpType>({
+    resolver: zodResolver(TopUpSchema),
   })
 
-  const onSubmit = async (data: CreditBalanceType) => {
+  const onSubmit = async (data: TopUpType) => {
     try {
-      await creditBalance.mutateAsync({ ...data, clientId })
+      await topUp.mutateAsync({ ...data, clientId })
       setOpen(false)
     } catch (error) {
       console.error("Error [CREDIT_BALANCE_FORM]", error)

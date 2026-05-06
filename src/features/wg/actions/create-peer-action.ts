@@ -42,8 +42,6 @@ export async function createPeerAction(data: CreatePeerData) {
     const address = peer.address
 
     if (!privateKey || !publicKey || !address) {
-      // Логируем, что именно отсутствует
-      console.error("Invalid peer data from WG API:", peer)
       throw new Error("Некорректные данные от WG API")
     }
 

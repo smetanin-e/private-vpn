@@ -6,7 +6,7 @@ import { WgPeerStatus } from "@/generated/prisma/enums"
 import { cn } from "@/src/shared/lib/utils"
 import { ChangeFreeMode } from "@/src/features/wg/ui/change-free-mode"
 import { formatTraffic } from "@/src/shared/lib/format-traffic"
-import { CreditBalanceModal } from "@/src/features/client/ui/credit-balance-modal"
+import { TopUpModal } from "@/src/features/transaction/ui/top-up-modal"
 import { PeerActions } from "@/src/entities/wg-peer/ui"
 import { useGetPeer } from "@/src/entities/wg-peer/hooks/use-get-peer"
 import { LoadingBounce } from "@/src/shared/components"
@@ -107,7 +107,7 @@ export function ClientCard({ id }: Props) {
               {peer.client.balance.toLocaleString("ru-RU")} ₽
             </p>
           </div>
-          <CreditBalanceModal clientId={peer.client.id} />
+          <TopUpModal clientId={peer.client.id} />
         </div>
 
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-[auto_auto] sm:gap-4">

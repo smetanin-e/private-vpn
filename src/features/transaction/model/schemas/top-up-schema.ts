@@ -1,8 +1,8 @@
 import { z } from "zod"
 
-export const creditBalanceSchema = z.object({
+export const TopUpSchema = z.object({
   count: z.string().regex(/^\d+$/, { message: "Введите число" }),
   key: z.string().min(1, { message: "Введите секретный ключ пополнения" }),
 })
 
-export type CreditBalanceType = z.infer<typeof creditBalanceSchema>
+export type TopUpType = z.infer<typeof TopUpSchema>

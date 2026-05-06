@@ -5,6 +5,7 @@ import { PeerApiType } from "@/src/features/wg/api/create-peer-api"
 import { PeerQueryType } from "../model/types"
 import { convertPeer } from "../lib/convert-peer"
 import { SortField, SortOrder } from "../ui/peer-sort"
+import { Prisma } from "@/generated/prisma/client"
 
 const basePeerSelect = {
   id: true,
@@ -138,39 +139,38 @@ export const peerRepository = {
       default:
         orderBy = { sendBytes: "desc" }
     }
+
+    const where: Prisma.WireguardPeerWhereInput = {}
+    if (search) {
+      const orConditions: Prisma.WireguardPeerWhereInput[] = [
+        {
+          client: {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        },
+
+        {
+          client: {
+            description: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        },
+      ]
+      // Добавляем поиск по clientId, если search является числом
+      const numericSearch = Number(search)
+      if (!Number.isNaN(numericSearch)) {
+        orConditions.unshift({ clientId: numericSearch })
+      }
+      where.OR = orConditions
+    }
+
     const peers = await prisma.wireguardPeer.findMany({
-      where: search
-        ? {
-            OR: [
-              {
-                client: {
-                  name: {
-                    contains: search,
-                    mode: "insensitive",
-                  },
-                },
-              },
-              {
-                client: {
-                  description: {
-                    contains: search,
-                    mode: "insensitive",
-                  },
-                },
-              },
-              // поиск по id (только если search — число)
-              ...(Number.isNaN(Number(search))
-                ? []
-                : [
-                    {
-                      client: {
-                        id: Number(search),
-                      },
-                    },
-                  ]),
-            ],
-          }
-        : {},
+      where,
       select: basePeerSelect,
       orderBy,
       take,

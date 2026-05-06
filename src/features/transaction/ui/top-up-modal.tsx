@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/shared/components/ui"
-import { CreditBalanceForm } from "./credit-balance-form"
+import { TopUpForm } from "./top-up-form"
 import { Plus } from "lucide-react"
 
 interface Props {
@@ -17,10 +17,7 @@ interface Props {
   clientId: number
 }
 
-export const CreditBalanceModal: React.FC<Props> = ({
-  className,
-  clientId,
-}) => {
+export const TopUpModal: React.FC<Props> = ({ className, clientId }) => {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -41,9 +38,7 @@ export const CreditBalanceModal: React.FC<Props> = ({
               Введите сумму для пополнения баланса и секретный ключ
             </DialogDescription>
           </DialogHeader>
-          {clientId && (
-            <CreditBalanceForm setOpen={setOpen} clientId={clientId} />
-          )}
+          {clientId && <TopUpForm setOpen={setOpen} clientId={clientId} />}
         </DialogContent>
       </Dialog>
     </div>
